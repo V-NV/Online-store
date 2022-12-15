@@ -1,0 +1,61 @@
+/*---------------footer---------------------*/
+.footer{
+    margin-top: 60px;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+.footer-container {
+    max-width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 40px);
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 20px;
+    background-color: rgb(137, 130, 238);
+}
+  
+.footer-data {
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+  
+.copyright {
+    color: #fff;
+    padding-right: 20px;
+}
+  
+.github-username {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 20px;
+    transition: .3s;
+    color: #fff;
+}
+  
+.github-username:hover {
+    color: #bdae82; 
+}
+.logo-name{
+    color: #fff;
+    font-weight: bold;
+    font-size: 25px;
+}
+.rss-logo {
+    width: 135px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("./rss.svg");
+    transition: .3s;
+}
+.rss-logo:hover {
+      filter: invert(26%) sepia(15%) saturate(638%) hue-rotate(7deg) brightness(92%)
+      contrast(87%);
+}
+
+    /**/
