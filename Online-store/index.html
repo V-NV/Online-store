@@ -11,38 +11,53 @@
 <body>
     <header>
        <div class="cont-header">
-          <div class="logo-header">online-store</div>
+          <h1 class="logo-header">Online-store</h1>
           <div class="total-cart">
-              <p>Cart Summ</p>
+              <p class="header-cart-sum">Сумма в корзине: 
+                <span class="header-summ">0</span>
+              </p>
           </div>
-          <div class="cart">Cart</div>
+          <div class="cart"></div>
        </div>
     </header>
     <main>
        <section class="left">
            <div class="up-button-left-cont">
-               <div class="reset-filter">reset filter</div>
-               <div class="copy-link">copy link</div>
+               <button class="reset-filter">reset filter</button>
+               <button class="copy-link">copy link</button>
            </div>
            <div class="midle-left-cont">
+               <div class="madein">Категория</div>
+               <div class="madein">Год</div>
            </div>
            <div class="bottom-left-cont">
-           </div>
+          </div>    
        </section>
        <section class="right">
            <div class="up-right-cont">
               <div class="sort">
-                sort
+                <input class="sort-input" placeholder="Введите запрос" autofocus="">
               </div>
               <div class="Found">
-                Found
+                Найдено: <span class="search-result">0</span>
               </div>
               <div class="search">
-                search
+                <div class="search-select-cont">
+                  <select class="select" name="sort-select">
+                    <option value="1" selected="selected">По популярности</option>
+                    <option value="2">По названию А-Я</option>
+                    <option value="3">по возрастанию цены</option>
+                    <option value="4">по убыванию цены</option>
+                  </select>
+                </div>
               </div>
               <div class="view">
-                view
+                <img src="./icon-list.png" alt="list" class="list">
+                <img src="./table40.png" alt="table" class="table">
               </div>
+           </div>
+           <div class="content">
+             
            </div>
        </section>
     </main>
@@ -59,5 +74,6 @@
             </div>
           </footer>
     </footer>
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
