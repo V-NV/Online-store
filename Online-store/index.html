@@ -42,12 +42,13 @@
                 Нашлось: <span class="search-result">0</span>
               </div>
               <div class="search">
-                <div class="search-select-cont">
-                  <select class="select" name="sort-select">
-                    <option value="1" selected="selected">По популярности</option>
-                    <option value="2">По названию А-Я</option>
-                    <option value="3">по возрастанию цены</option>
-                    <option value="4">по убыванию цены</option>
+                <div class="search-select-cont"> 
+                  <select class="select" name="sort-select" id="sort-select">
+                    <option class="opt" value="">Выберите сортировку</option>
+                    <option value="a-z">по названию A-Z</option>
+                    <option value="z-a">по названию Z-A</option>
+                    <option value="from-min">по возрастанию цены</option>
+                    <option value="from-max">по убыванию цены</option>
                   </select>
                 </div>
               </div>

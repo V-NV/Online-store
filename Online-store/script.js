@@ -2,7 +2,7 @@ import data from './data.js';
 const view = document.querySelector('.content');
 const arrData = data;
 let arrTemp = [];//для первого вызванного фильтра
-let arrCurrient = [];//текущее состояние массива
+let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
 
@@ -41,7 +41,7 @@ function createTable(Data) {
       noItems();
      }
   }
-  
+
   /*----------------------отрисовка таблицой-конец--------------------------- */
 
 
@@ -159,3 +159,31 @@ b.classList.add('off')
 }
 
 /*-----------------------------Нет-товаров-конец-----------------------------*/
+
+/*--------------------------------Сортировка---------------------------------*/
+
+const SortBy = document.querySelector('#sort-select');
+
+SortBy.addEventListener('change', () => {
+ 
+if ((SortBy).value == 'a-z') {
+  arrCurrient.sort(function (a, b) {
+    if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
+    if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+    return 0;
+  });
+} else if ((SortBy).value == 'z-a') {
+  arrCurrient.sort(function (a, b) {
+    if (b.title.toLowerCase() < a.title.toLowerCase()) return -1;
+    if (b.title.toLowerCase() > a.title.toLowerCase()) return 1;
+    return 0;
+  });
+} else if ((SortBy).value == 'from-min') {
+  arrCurrient.sort((a, b) => a.price*1 - b.price*1);
+} else if ((SortBy).value == 'from-max') {
+  arrCurrient.sort((a, b) => b.price*1 - a.price*1);
+}
+isTable?createTable(arrCurrient):createList(arrCurrient);
+});
+
+/*--------------------------------Сортировка---------------------------------*/
