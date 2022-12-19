@@ -1,3 +1,4 @@
+body::-webkit-scrollbar { width: 0; } 
 body{
     display: flex;
     flex-direction: column;
@@ -12,7 +13,7 @@ header{
     height: 100px;
     border:solid 2px green;
     margin: 5px;
-}
+} 
 .cont-header{
     display: flex;
     flex-direction: row;
@@ -151,6 +152,7 @@ select {
 .right{
     width: 75%;
     min-height: 700px;
+    height: 920px;
     border: solid 2px green;
     display: flex;
     flex-direction: column;
@@ -167,21 +169,39 @@ select {
     margin-top: 10px;
     margin-bottom: 15px;
 }
+.found{
+    font-size: 22px;
+    color: #16931f;
+}
 .content{
 width: 100%;
-height: 600px;
+height: 832px;
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
 justify-content: center;
 gap: 18px;
 overflow: auto;
+scroll-behavior: smooth;
+}
+.no-items{
+    font-size: 3vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 30%;
+    color: lightcoral;
+    line-height: 0px;
 }
 .item{
     display: flex;
     flex-direction: column;
-    height: 500px;
+    justify-content: flex-start;
+    height: 520px;
+    min-width: 240px;
     width:31%;
+    max-width: 300px;
     border:solid 1px violet;
     border-radius:10px;
     background-color: #f7f7ea;
@@ -189,6 +209,7 @@ overflow: auto;
 .item:hover{
     background-color: #eeeeee;
     cursor: pointer;
+    border: solid 1px #4caf50;
 }
 .item-name{
     align-self: center;
@@ -198,6 +219,13 @@ overflow: auto;
     margin-left: 10px;
     font-size: 20px;
     color: #1b7b64;
+    margin-bottom: 15px;
+    line-height: 18px;
+}
+.item-price{
+    margin-left: 10px;
+    font-size: 20px;
+    color: #7b1b38;
     margin-bottom: 15px;
     line-height: 22px;
 }
@@ -226,6 +254,9 @@ overflow: auto;
     color:#e2cb58;
 }
 .off{
+    display: none; 
+}
+.net{
     display: none;
 }
 /*--------------------list-style--------------------*/
@@ -243,21 +274,41 @@ overflow: auto;
 .item-list:hover{
     background-color: #eeeeee;
     cursor: pointer;
+    border: solid 1px #4caf50;
 }
 .item-name-list{
 position: absolute;
 margin-left: 80px;
 }
 .text-cont-list{
-    width: 238px;
-margin-top: 25px;
+    width: 32%;
+margin-top: 10px;
 }
 .item-image-list{
-width: 300px;
+width: 32%;
 height: 235px;
-margin-left: 55px;
 }
-
+.item-button-cont-list{
+    width: 32%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 60px;
+}
+/************************scroll************************/
+::-webkit-scrollbar-track {
+	background-color: rgb(221, 125, 221); /*Цвет ползунка*/
+}   
+::-webkit-scrollbar-thumb { 
+	border-radius: 5px; /*Закругление ползунка*/
+	background-color: #2daed1; /*Цвет ползунка*/
+} 
+::-webkit-scrollbar { 
+	width: 8px;  /*Толщина скролла*/
+}
+/************************scroll************************/
 /*----------------------------------------------------*/
 /*----------------------------------------------------*/
 

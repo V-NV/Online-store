@@ -67,7 +67,7 @@ const data = [
         "discountPercentage": 11.02,
         "rating": 4.57,
         "stock": 83,
-        "brand": "APPle",
+        "brand": "Apple",
         "category": "laptops",
         "thumbnail": "https://i.dummyjson.com/data/products/6/thumbnail.png",
         "images": ["https://i.dummyjson.com/data/products/6/1.png", "https://i.dummyjson.com/data/products/6/2.jpg", "https://i.dummyjson.com/data/products/6/3.png", "https://i.dummyjson.com/data/products/6/4.jpg"]
@@ -91,7 +91,7 @@ const data = [
         "discountPercentage": 10.23,
         "rating": 4.43,
         "stock": 68,
-        "brand": "Microsoft Surface",
+        "brand": "Microsoft",
         "category": "laptops",
         "thumbnail": "https://i.dummyjson.com/data/products/8/thumbnail.jpg",
         "images": ["https://i.dummyjson.com/data/products/8/1.jpg", "https://i.dummyjson.com/data/products/8/2.jpg", "https://i.dummyjson.com/data/products/8/3.jpg", "https://i.dummyjson.com/data/products/8/4.jpg", "https://i.dummyjson.com/data/products/8/thumbnail.jpg"]
