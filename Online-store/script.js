@@ -5,6 +5,8 @@ let arrTemp = [];//для первого вызванного фильтра
 let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
+let arrSmartCheckbox = [];//массив smartfones
+let isCheckOn = false; // состояние чекбокса
 
 createTable(arrData)//запуск при первой загрузке со всеми товарами 
 
@@ -14,7 +16,7 @@ createTable(arrData)//запуск при первой загрузке со в�
 function createTable(Data) {
   arrTemp = [];
   arrCurrient = Data;//передача текущего состояния
-   let data = Data;
+   let data = arrCurrient;
     if(view) {
       view.innerHTML = '';
       for (let i = 0; i < Data.length; i += 1) {
@@ -118,34 +120,37 @@ Table.addEventListener('click', function(){
 /*------------------------------swich-table-list-END-----------------------------*/
 /*let o = document.querySelector('.text-cont')
 console.log(o.childNodes[1].className)*/
+/*-----------------------------------Ввод-инпут----------------------------------*/
 
 const searchInput = document.querySelector('#input');
 
 if (searchInput) {
   searchInput.oninput = function(event) {
- 
+ console.log(searchInput.value, 'введено')
     const ItemToDelete2  = document.querySelectorAll('.item-list');
     const ItemToDelete  = document.querySelectorAll('.item');
-
+    let dataTA = arrData;
     const res = event.target.value
-    let count = 0;
+    
     const a = document.querySelector('.search-result')
-    a.textContent = arrData.length;
-    for (let i = 0; i < arrData.length; i += 1) {
+   if(isCheckOn === true){dataTA = arrSmartCheckbox}//если включен чекбокс
+   
+    for (let i = 0; i < dataTA.length; i += 1) {
                                                            //все варианты для поиска в одну строку       
-      let SearchString = arrData[i].title + arrData[i].price.toString() + arrData[i].brand + arrData[i].stock.toString() + arrData[i].rating.toString() + arrData[i].category;
+      let SearchString = dataTA[i].title + ' ' + dataTA[i].price.toString() + ' ' +  dataTA[i].brand + ' ' +  dataTA[i].stock.toString() + ' ' +  dataTA[i].rating.toString() + ' ' +  dataTA[i].category;
                     
       if (SearchString.toLowerCase().includes(res.toLowerCase() || res) == true ) {
-        count += 1
-          arrTemp.push(arrData[i])
+       
+          arrTemp.push(dataTA[i])
        }
      }
      view.innerHTML = '';
     isTable?createTable(arrTemp):createList(arrTemp);
   }
 }
+/*-----------------------------------Ввод-инпут----------------------------------*/
 
-/*-----------------------------Нет-товаров-----------------------------------*/
+/*-----------------------------------Нет-товаров---------------------------------*/
 
 function noItems(){
 const a = document.querySelector('.search-result')
@@ -187,3 +192,51 @@ isTable?createTable(arrCurrient):createList(arrCurrient);
 });
 
 /*--------------------------------Сортировка---------------------------------*/
+
+/*---------------------------------Чекбоксы----------------------------------*/
+const BoxCategory = document.getElementById('category');//весь контейнер категории
+const CheckSmart = document.getElementById('smart');
+const CheckNout = document.getElementById('nout');
+const CheckShirt = document.getElementById('shirt');
+const CheckWatch = document.getElementById('watch');
+let ArrAllCategory = [];
+//console.log(CheckSmart.checked)
+BoxCategory.addEventListener('click',() => {
+  //console.log(CheckSmart.checked)
+  arrSmartCheckbox = [];// все зажатые
+  let arrTempBox = [];//для конката
+  let arrSmart = [];
+  let arrNout = [];
+  let arrShirt = [];
+  let arrWatch = []; 
+
+    if (CheckSmart.checked) {
+      arrSmart = [];
+      arrSmart = arrData.filter((el) => el.category.includes('smartphones'));
+    }
+    if (CheckNout.checked) {
+      arrNout = [];
+      arrNout = arrData.filter((el) => el.category.includes('laptops'));
+    }
+    if (CheckShirt.checked) {
+      arrShirt = [];
+      arrShirt = arrData.filter((el) => el.category.includes('mens-shirts'));
+    }
+    if (CheckWatch.checked) {
+      arrWatch = [];
+      arrWatch = arrData.filter((el) => el.category.includes('mens-watches'));
+    }  
+    if(CheckSmart.checked || CheckNout.checked || CheckShirt || CheckWatch) {
+      searchInput.value = '';// очистка инпута при выкл чекбокса
+      searchInput.placeholder = 'Введите запрос'
+      isCheckOn = true;
+        arrSmartCheckbox = arrTempBox.concat(arrSmart, arrNout, arrShirt, arrWatch);
+        isTable?createTable(arrSmartCheckbox):createList(arrSmartCheckbox);
+    }  
+      if(arrSmartCheckbox.length < 1){
+        isCheckOn = false;
+        isTable?createTable(arrData):createList(arrData);
+      }
+  });
+
+
