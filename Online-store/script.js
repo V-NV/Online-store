@@ -1,12 +1,15 @@
 import data from './data.js';
 const view = document.querySelector('.content');
+const SortBy = document.querySelector('#sort-select');//сортировка
 const arrData = data;
 let arrTemp = [];//для первого вызванного фильтра
 let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
-let arrSmartCheckbox = [];//массив smartfones
-let isCheckOn = false; // состояние чекбокса
+let arrCategoryCheckbox = [];//массив верхнего чекбокса
+let arrBrandCheckbox = [];//массив нижнего чекбокса
+let isCheckOn = false; // состояние чекбоксов категорий
+let isCheckOn2 = false; // состояние чекбоксов брэндов
 
 createTable(arrData)//запуск при первой загрузке со всеми товарами 
 
@@ -15,7 +18,8 @@ createTable(arrData)//запуск при первой загрузке со в�
 
 function createTable(Data) {
   arrTemp = [];
-  arrCurrient = Data;//передача текущего состояния
+   arrCurrient = Data;//передача текущего состояния
+   Sort2();
    let data = arrCurrient;
     if(view) {
       view.innerHTML = '';
@@ -52,6 +56,7 @@ function createTable(Data) {
   function createList(Data) {
     arrTemp = [];
     arrCurrient = Data;//передача текущего состояния
+    Sort2();
      let data = Data;
       if(view) {
         view.innerHTML = '';
@@ -133,7 +138,7 @@ if (searchInput) {
     const res = event.target.value
     
     const a = document.querySelector('.search-result')
-   if(isCheckOn === true){dataTA = arrSmartCheckbox}//если включен чекбокс
+   if(isCheckOn === true){dataTA = arrCategoryCheckbox}//если включен чекбокс
    
     for (let i = 0; i < dataTA.length; i += 1) {
                                                            //все варианты для поиска в одну строку       
@@ -145,6 +150,7 @@ if (searchInput) {
        }
      }
      view.innerHTML = '';
+     Sort();
     isTable?createTable(arrTemp):createList(arrTemp);
   }
 }
@@ -167,10 +173,12 @@ b.classList.add('off')
 
 /*--------------------------------Сортировка---------------------------------*/
 
-const SortBy = document.querySelector('#sort-select');
+//const SortBy = document.querySelector('#sort-select'); переместил вверх
 
-SortBy.addEventListener('change', () => {
+SortBy.addEventListener('change', Sort);
  
+  function Sort() {
+    console.log(SortBy.value,'текущая выбранная сортировка');
 if ((SortBy).value == 'a-z') {
   arrCurrient.sort(function (a, b) {
     if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
@@ -189,11 +197,31 @@ if ((SortBy).value == 'a-z') {
   arrCurrient.sort((a, b) => b.price*1 - a.price*1);
 }
 isTable?createTable(arrCurrient):createList(arrCurrient);
+}
+function Sort2() {//тоже что первая но без замыкания
+  console.log(SortBy.value,'текущая выбранная сортировка');
+if ((SortBy).value == 'a-z') {
+arrCurrient.sort(function (a, b) {
+  if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
+  if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+  return 0;
 });
+} else if ((SortBy).value == 'z-a') {
+arrCurrient.sort(function (a, b) {
+  if (b.title.toLowerCase() < a.title.toLowerCase()) return -1;
+  if (b.title.toLowerCase() > a.title.toLowerCase()) return 1;
+  return 0;
+});
+} else if ((SortBy).value == 'from-min') {
+arrCurrient.sort((a, b) => a.price*1 - b.price*1);
+} else if ((SortBy).value == 'from-max') {
+arrCurrient.sort((a, b) => b.price*1 - a.price*1);
+}
+}
 
 /*--------------------------------Сортировка---------------------------------*/
 
-/*---------------------------------Чекбоксы----------------------------------*/
+/*---------------------------- -Чекбоксы-верхние-----------------------------*/
 const BoxCategory = document.getElementById('category');//весь контейнер категории
 const CheckSmart = document.getElementById('smart');
 const CheckNout = document.getElementById('nout');
@@ -203,7 +231,7 @@ let ArrAllCategory = [];
 //console.log(CheckSmart.checked)
 BoxCategory.addEventListener('click',() => {
   //console.log(CheckSmart.checked)
-  arrSmartCheckbox = [];// все зажатые
+  arrCategoryCheckbox = [];// все зажатые
   let arrTempBox = [];//для конката
   let arrSmart = [];
   let arrNout = [];
@@ -226,17 +254,18 @@ BoxCategory.addEventListener('click',() => {
       arrWatch = [];
       arrWatch = arrData.filter((el) => el.category.includes('mens-watches'));
     }  
-    if(CheckSmart.checked || CheckNout.checked || CheckShirt || CheckWatch) {
+    if(CheckSmart.checked || CheckNout.checked || CheckShirt.checked || CheckWatch.checked) {
       searchInput.value = '';// очистка инпута при выкл чекбокса
       searchInput.placeholder = 'Введите запрос'
       isCheckOn = true;
-        arrSmartCheckbox = arrTempBox.concat(arrSmart, arrNout, arrShirt, arrWatch);
-        isTable?createTable(arrSmartCheckbox):createList(arrSmartCheckbox);
+        arrCategoryCheckbox = arrTempBox.concat(arrSmart, arrNout, arrShirt, arrWatch);
+        isTable?createTable(arrCategoryCheckbox):createList(arrCategoryCheckbox);
     }  
-      if(arrSmartCheckbox.length < 1){
+      if(arrCategoryCheckbox.length < 1){
         isCheckOn = false;
         isTable?createTable(arrData):createList(arrData);
       }
   });
+/*-------------------------Чекбоксы-верхние-END----------------------------*/
 
 
