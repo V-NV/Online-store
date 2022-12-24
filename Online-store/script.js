@@ -2,30 +2,33 @@ import data from './data.js';
 const view = document.querySelector('.content');
 const SortBy = document.querySelector('#sort-select');//сортировка
 const arrData = data;
+const arrFirst = data.slice();
 let arrTemp = [];//для первого вызванного фильтра
 let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
-let arrCategoryCheckbox = [];//массив верхнего чекбокса
-let arrBrandCheckbox = [];//массив нижнего чекбокса
-let isCheckOn = false; // состояние чекбоксов категорий
-let isCheckOn2 = false; // состояние чекбоксов брэндов
+let arrSmartCheckbox = [];//массив smartfones
+let isCheckOn = false; // состояние чекбокса
 
 createTable(arrData)//запуск при первой загрузке со всеми товарами 
 
-
+console.log(arrData[0].title)
 /*----------------------отрисовка таблицой---------------------------- */
 
 function createTable(Data) {
   arrTemp = [];
-   arrCurrient = Data;//передача текущего состояния
-   Sort2();
-   let data = arrCurrient;
+  arrCurrient = Data;//передача текущего состояния
+  Sort2(); 
+  let data = arrCurrient;
+  let IdVerific = document.getElementsByClassName('item-image')
+  
     if(view) {
       view.innerHTML = '';
-      for (let i = 0; i < Data.length; i += 1) {
+      
+      for (let i = 0; i < arrCurrient.length; i += 1) {
+        
         view.innerHTML += `
-          <div class="item" id="${data[i].id}">
+          <div class="item" id="item${data[i].id}">
             <h2 class="item-name">${data[i].title}</h2>
             <div class="text-cont">
             <li class="item-discr">Брэнд: ${data[i].brand}</li>
@@ -34,22 +37,35 @@ function createTable(Data) {
             <li class="item-discr">Количество: ${data[i].stock}</li>
             <li class="item-price">Цена: $ ${data[i].price}</li>
             </div>
-            <img class="item-image" src="${data[i].images[0]}">
+            <img class="item-image" id="${data[i].id - 1}" alt="${data[i].title}" src="${data[i].thumbnail}">
             <div class="item-button-cont">
-            <button class="btn-item" id="btn-add">Добавить в корзину</button>
-            <button class="btn-item" id="btn-del">Удалить из корзины</button>
+            <button class="btn-item" id="btn-add${data[i].id}">Добавить в корзину</button>
+            <button class="btn-item" id="btn-del${data[i].id}">Удалить из корзины</button>
             </div>
           </div>
         `
+            }
+      /*for(let j = 0;j<arrFirst.length;j+=1){ 
+        for (let i = 0; i < data.length; i += 1) {
+          if(arrFirst[j].title == data[i].title){
+            data[i].id = arrFirst[j].id
+        }}
       }
-        const a = document.querySelector('.search-result')
-      a.textContent = Data.length;
-      noItems();
-     }
+        console.log(arrFirst[0].id,'arrFirst')
+      console.log(arrCurrient[0].id,'arrCurrient')
+      */
+    }
+    isList = false;
+    isTable = true;
+    
+    const a = document.querySelector('.search-result');
+    a.textContent = Data.length;
+    noItems();
+     PopupOn();
+  
   }
-
   /*----------------------отрисовка таблицой-конец--------------------------- */
-
+ 
 
   /*-------------------------отрисовка списком------------------------------- */
 
@@ -70,11 +86,11 @@ function createTable(Data) {
               <li class="item-discr">Количество: ${data[i].stock}</li>
               <li class="item-price">Цена: $ ${data[i].price}</li>
               </div>
-              <img class="item-image-list" src="${data[i].images[0]}">
+              <img class="item-image-list" id="${data[i].id-1}" alt="${data[i].title}" src="${data[i].thumbnail}">
               <div class="item-button-cont-list">
               <h2 class="item-name">${data[i].title}</h2>
-              <button class="btn-item" id="btn-add">Добавить в корзину</button>
-              <button class="btn-item" id="btn-del">Удалить из корзины</button>
+              <button class="btn-item" id="btn-add${data[i].id}">Добавить в корзину</button>
+              <button class="btn-item" id="btn-del${data[i].id}">Удалить из корзины</button>
               </div>
             </div>
           `
@@ -84,7 +100,8 @@ function createTable(Data) {
         
         const a = document.querySelector('.search-result');
         a.textContent = Data.length;
-        noItems(); 
+        noItems();
+         PopupOn();
        }
     }
 
@@ -138,7 +155,7 @@ if (searchInput) {
     const res = event.target.value
     
     const a = document.querySelector('.search-result')
-   if(isCheckOn === true){dataTA = arrCategoryCheckbox}//если включен чекбокс
+   if(isCheckOn === true){dataTA = arrSmartCheckbox}//если включен чекбокс
    
     for (let i = 0; i < dataTA.length; i += 1) {
                                                            //все варианты для поиска в одну строку       
@@ -150,7 +167,6 @@ if (searchInput) {
        }
      }
      view.innerHTML = '';
-     Sort();
     isTable?createTable(arrTemp):createList(arrTemp);
   }
 }
@@ -231,7 +247,7 @@ let ArrAllCategory = [];
 //console.log(CheckSmart.checked)
 BoxCategory.addEventListener('click',() => {
   //console.log(CheckSmart.checked)
-  arrCategoryCheckbox = [];// все зажатые
+  arrSmartCheckbox = [];// все зажатые
   let arrTempBox = [];//для конката
   let arrSmart = [];
   let arrNout = [];
@@ -254,18 +270,133 @@ BoxCategory.addEventListener('click',() => {
       arrWatch = [];
       arrWatch = arrData.filter((el) => el.category.includes('mens-watches'));
     }  
-    if(CheckSmart.checked || CheckNout.checked || CheckShirt.checked || CheckWatch.checked) {
+    if(CheckSmart.checked || CheckNout.checked || CheckShirt || CheckWatch) {
       searchInput.value = '';// очистка инпута при выкл чекбокса
       searchInput.placeholder = 'Введите запрос'
       isCheckOn = true;
-        arrCategoryCheckbox = arrTempBox.concat(arrSmart, arrNout, arrShirt, arrWatch);
-        isTable?createTable(arrCategoryCheckbox):createList(arrCategoryCheckbox);
+        arrSmartCheckbox = arrTempBox.concat(arrSmart, arrNout, arrShirt, arrWatch);
+        isTable?createTable(arrSmartCheckbox):createList(arrSmartCheckbox);
     }  
-      if(arrCategoryCheckbox.length < 1){
+      if(arrSmartCheckbox.length < 1){
         isCheckOn = false;
         isTable?createTable(arrData):createList(arrData);
       }
   });
-/*-------------------------Чекбоксы-верхние-END----------------------------*/
 
+/*---------------------------------Чекбоксы-END---------------------------------*/
+
+/*--------------------------------Карточки попап--------------------------------*/
+
+function PopupOn(){
+  
+  const itemPopup = document.getElementsByClassName('item-image');
+  const itemPopupList = document.getElementsByClassName('item-image-list');
+  const Left = document.querySelector('.left');
+  const Right = document.querySelector('.right');
+  const Footer = document.querySelector('.footer');
+  const Popup = document.querySelector('.popup');
+
+  
+  let elements = [];
+  if(isTable){elements = itemPopup}
+  if(isList){elements = itemPopupList}
+
+  for(let el of elements){
+  el.addEventListener('click', function(event) {
+  
+  let elem = event.target
+  let ID = elem.id;
+ 
+  view.classList.add('off')
+  Left.classList.add('off')
+  Right.classList.add('off')
+  Footer.classList.add('foot-down')
+
+  Popup.classList.remove('off')
+
+    Popup.innerHTML = '';
+    Popup.innerHTML += `
+    <div class="item-pop" id="${ID}}">
+         <div class="exit">х</div>
+         <h2 class="item-name-pop">${arrFirst[ID].title}</h2>
+       <div class="cont-box-pop">
+        <div class="img-box-pop">
+        <img class="item-image-pop" id="i${arrFirst[ID].images[0]}" alt="${arrFirst[ID].title}" src="${arrFirst[ID].thumbnail}">
+       </div>
+       <div class="text-cont-pop">
+        <li class="item-discr">Брэнд: ${arrFirst[ID].brand}</li>
+        <li class="item-discr">Категория: ${arrFirst[ID].category}</li>
+        <li class="item-discr">Рейтинг: ${arrFirst[ID].rating}</li>
+        <li class="item-discr">Скидка: ${arrFirst[ID].discountPercentage} %</li>
+        <li class="item-discr">Количество: ${arrFirst[ID].stock}</li>
+        <li class="item-price">Цена: $ ${arrFirst[ID].price}</li>
+       <div class="arrow" id="left-arrow">&#8644</div>
+      </div>
+      </div>
+          <div class="opisanie">Описание: ${arrFirst[ID].description}</div>
+        <div class="item-button-cont-pop">
+          <button class="btn-item" id="btn-add${arrFirst[ID].id}">Добавить в корзину</button>
+          <button class="btn-item" id="btn-del${arrFirst[ID].id}">Удалить из корзины</button>
+        </div>
+      </div>
+    `
+    const Mov = document.querySelector('.item-image-pop');
+    const btnChange = document.getElementById('left-arrow');
+       
+    let arrImg = arrFirst[ID].images;
+      
+    let count = 0;
+   
+    btnChange.addEventListener('click', function(){
+   
+      if(count === 0 ){
+        Mov.src = arrImg[count];
+        count += 1;
+      }
+      else if(count > 0 && count < arrImg.length){
+        Mov.src = arrImg[count];
+        count += 1;
+       }
+       else if(count > arrImg.length){
+        count = 0
+        Mov.src = arrImg[count];
+        count += 1;
+       }
+       else if(count < 0){
+        count = 0;
+        count = arrImg.length-1
+        Mov.src = arrImg[count];
+        count += 1;
+       }
+       else if(count == arrImg.length){
+        count = 0;
+        Mov.src = arrImg[count];
+        count += 1;
+       }
+
+    })
+   
+    const ZoomImg = document.querySelector('.item-image-pop');
+    ZoomImg.addEventListener('mouseover', function(){
+        ZoomImg.classList.add('item-image-pop-on');
+     })
+    ZoomImg.addEventListener('mouseout', function(){
+         ZoomImg.classList.remove('item-image-pop-on');
+     })
+  
+    const Exit = document.querySelector('.exit');
+    Exit.addEventListener('click', function() {
+      
+      Left.classList.remove('off')
+      Right.classList.remove('off')
+      Footer.classList.remove('foot-down')
+      view.classList.remove('off');
+      Popup.classList.add('off');
+      Popup.innerHTML = '';
+   
+  })
+})
+  }
+}
+  
 
