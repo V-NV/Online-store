@@ -1,8 +1,10 @@
 import data from './data.js';
 const view = document.querySelector('.content');
 const SortBy = document.querySelector('#sort-select');//сортировка
+const CartIcon = document.querySelector('.cart');// при клике на корзину
 const arrData = data;
 const arrFirst = data.slice();
+let arrCart = [];//массив карзины
 let arrTemp = [];//для первого вызванного фильтра
 let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
@@ -62,6 +64,7 @@ function createTable(Data) {
     a.textContent = Data.length;
     noItems();
      PopupOn();
+     AddItems()
   
   }
   /*----------------------отрисовка таблицой-конец--------------------------- */
@@ -102,6 +105,7 @@ function createTable(Data) {
         a.textContent = Data.length;
         noItems();
          PopupOn();
+         AddItems()
        }
     }
 
@@ -110,30 +114,40 @@ function createTable(Data) {
 /*----------------------------------------------------------------------------*/
 
 /*------------------------------swich-table-list------------------------------*/
-
+const Table = document.getElementById("table");
 const List = document.getElementById("list");
+Table.className = 'now';
+
 List.addEventListener('click', function(){
     if(!isList && arrCurrient.length < 1) {
       createList(arrData)
+      Table.className = '';
+      List.className = 'now';
       isList = true;
       isTable = false;
     }
     if(!isList && arrCurrient.length > 0) {
       createList(arrCurrient)
+      Table.className = '';
+      List.className = 'now';
       isList = true;
       isTable = false;
     }
 });
 
-const Table = document.getElementById("table");
+
 Table.addEventListener('click', function(){
   if(!isTable && arrCurrient.length < 1) {
     createTable(arrData)
+    Table.className = 'now';
+    List.className = '';
     isList = false;
     isTable = true;
   }
   if(!isTable && arrCurrient.length > 0) {
     createTable(arrCurrient)
+    Table.className = 'now';
+    List.className = '';
     isList = false;
     isTable = true;
   }
@@ -383,6 +397,7 @@ function PopupOn(){
     ZoomImg.addEventListener('mouseout', function(){
          ZoomImg.classList.remove('item-image-pop-on');
      })
+  AddItems();
   
     const Exit = document.querySelector('.exit');
     Exit.addEventListener('click', function() {
@@ -398,5 +413,152 @@ function PopupOn(){
 })
   }
 }
+
+/*--------------------------------Карточки попап-End-------------------------------*/
+
+/*-------------------------------------корзина-------------------------------------*/
+CartIcon.addEventListener('click',OpenCart);
+
+function OpenCart(){
+  const CartPage = document.querySelector('.cart-page');
+  const Left = document.querySelector('.left');
+  const Right = document.querySelector('.right');
+  const Footer = document.querySelector('.footer');
+   
+  view.classList.add('off')
+  Left.classList.add('off')
+  Right.classList.add('off')
+  Footer.classList.add('foot-down')
+  CartPage.classList.remove('off')
+ 
+    CartPage.innerHTML = '';
+    CartPage.innerHTML += `
+    <div class="left-cart">
+    <div class="left-cart-header">
+        <p class="articl">Товаров в корзине</p>
+          <div class="paginat-box">
+             <div class="item-box">
+                <p>items: <span> 0 </span></p>
+             </div>
+                <div class="item-box2">
+                <p>page:<span> &#9664 </span><span>0</span><span> &#9654 </span></p>
+            </div>      
+            </div>
+    </div>
+      <div class="left-cart-content">
+    </div>
+</div>    
+<div class="right-cart">
+       <div class="right-cart-header">
+           <p>Итого:</p>
+       </div>
+       <div class="right-cart-content">
+         <p>Товаров:</p>
+         <p>Сумма</p>
+         <div class="sort">
+         <div>
+            <input class="promo-input" id="input" placeholder="Введите промо код" autofocus="">
+         </div> 
+            <p class="promotest">Тестовый код: 'Rss10' 'Rss15'</p>  
+        </div>
+        <button class="btn-buy">Купить</button>
+       </div>       
+</div> 
+    `
+    const CartItem = document.querySelector('.left-cart-content');
+    
+    
+    for (let i = 0; i < arrCart.length; i += 1) {
+    
+    CartItem.innerHTML += `
+           
+    <div class="item-cart" id="${arrCart[i].id}">
+                  
+       <div class="img-box-cart">
+        <img class="item-image-pop" id="i${arrCart[i].images[0]}" alt="${arrCart[i].title}" src="${arrCart[i].thumbnail}">
+       </div>
+       <div class="text-cont-cart">
+        <h2 class="cart-name">${arrCart[i].title}</h2>
+        <div class="opisanie-cart">Описание: ${arrCart[i].description}</div>
+        <p class="discr-cart">Брэнд: ${arrCart[i].brand}</p>
+        <p class="discr-cart">Категория: ${arrCart[i].category}</p>
+       <div class="down-cart">
+        <p class="discr-cart-d">Рейтинг: ${arrCart[i].rating}</p>
+        <p class="discr-cart-d">Скидка: ${arrCart[i].discountPercentage} %</p>
+       </div> 
+      </div>
+          
+        <div class="item-button-cont-cart">
+          <p class="discr-cart">Наличие: ${arrCart[i].stock}</p>
+          <button class="btn-item-cart" id="btn-plus${arrCart[i].id}"> + </button>
+          <button class="btn-item-cart" id="btn-minus${arrCart[i].id}"> - </button>
+          <p class="price-cart-d">Цена: $ ${arrCart[i].price}</p>
+        </div>
+    </div>
+    `
+  }
+};
+/******************добавление/удаление товара в корзину*************/
+
+
+
+function AddItems(){
+let BtnAddDel = document.querySelectorAll('.btn-item');
+let MainCart = document.querySelector('.cart');
+let suma = 0;
+
+
+for(let el of BtnAddDel){
+el.addEventListener('click', function(e) {
+  const korz = document.querySelector('.cartscore');
+  const summ = document.querySelector('.header-summ');
   
+  let knop = e.target;
+  console.log(knop,'эта кнопка нажата')
+  let idBtn = knop.id.slice(7);
+
+  let isDouble = [];
+  isDouble = arrCart.filter((items) => +items.id == +idBtn);
+
+if(knop.id.includes('add') && isDouble.length < 1){
+    arrCart.push(arrFirst[idBtn-1])
+    korz.textContent = arrCart.length;
+    suma += +arrFirst[idBtn-1].price;
+    summ.textContent = suma;
+    
+   
+    }
+  
+    let textId = knop.id.slice(0,7)
+    console.log(textId,'textId')
+    
+  
+   
+    if(knop.id.includes('del') && arrCart.length>0) {
+      console.log(arrCart,'arrCart до фильтра')
+     let temp = [];
+     temp = arrCart.filter((items) => +items.id !== +idBtn)
+      console.log(arrTemp,'arrTemp')
+     //items.id !==idBtn-1);
+     arrCart = temp; 
+     console.log(arrCart,'arrCart после фильтра')
+     if(isDouble.length){
+     suma = suma - +arrFirst[idBtn-1].price;
+     korz.textContent = arrCart.length;
+     summ.textContent = suma;
+     }
+      }
+      //}
+})
+}
+}
+/********************добавление товара/удаление конец***************/
+
+
+
+
+/************************удаление товара********************/
+
+/*********************удаление товара конец*****************/
+
 

@@ -24,10 +24,16 @@ header{
     border: solid 2px red;
 }
 .logo-header{
+    position: relative;
     margin-left: 1rem;
+    z-index: 5;
+    
+}
+.a-logo{
     text-shadow: 0 0 10px rgb(74 255 34), 0 0 20px #ffedfc, 0 0 30px #d37aff, 0 0 40px #a6ffea;
-    font-size: 190%;
+    font-size: 130%;
     color: #da18f0;
+    text-decoration: none;
 }
 .header-cart-sum{
     font-size: 150%;
@@ -46,8 +52,12 @@ header{
     background-repeat: no-repeat;
     background: url('./basket_full.jpg');
 }
-
-
+.cartscore{
+margin-top: -3px;
+margin-left: -15px;
+color: red;
+font-size: 23px;
+}
 /*----------------------end-header-----------------------*/
 
 
@@ -187,7 +197,7 @@ select {
 }
 .up-right-cont{
     width: 98%;
-    height: 40px;
+    height: 54px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -201,6 +211,10 @@ select {
     color: #16931f;
     width:122px;
 }
+.now{
+    background-color: #e5d2e0;
+}
+
 
 /*---------------------------------popup---------------------------------*/
 
@@ -397,7 +411,7 @@ scroll-behavior: smooth;
     cursor: pointer;
 }
 .off{
-    display: none; 
+    display: none !important; 
 }
 .net{
     display: none;
@@ -442,6 +456,187 @@ height: 235px;
     margin: 0 auto;
     margin-bottom: 60px;
 }
+/*********************************корзина******************************/
+.cart-page{
+    display: flex;
+    width: 90vw;
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 auto;
+    
+}
+.left-cart{
+    border: dotted 3px red;
+    height: 100%;
+    width: 66%;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+.left-cart-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: solid 2px green;
+}
+.articl{
+    margin-left: 10px;
+    font-size: 22px;
+}
+.paginat-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 300px;
+    margin-right: 10px;
+    font-size: 22px;
+}
+.item-box{
+    width: 100px;
+    margin-right: 40px;  
+}
+.item-box2{
+    width: 120px;
+    line-height: 20px;
+}
+.right-cart{
+    border: dotted 2px red;
+    height: 400px;
+    width: 30%;
+}
+.right-cart-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.right-cart-header{
+    height: 69px;
+    width: 100%;
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px violet;
+}
+.promo-input{
+        display: block;
+        height: 30px;
+        width: 100%;
+        border-radius: 12px;
+        background-color: rgb(241 192 247);
+        font-weight: bold;
+        color: #161409;
+        font-size: 18px;
+        outline: none;
+       
+ 
+}
+.btn-buy{
+    height: 42px;
+    width: 45%;
+    background-color: #2daed1;
+    color: #f5e593;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+.btn-buy:hover{
+    background-color: rgb(197, 127, 77);
+    
+}
+.promotest{
+    color: #c59473;
+    font-size: 15px;
+    text-align: center;
+}
+/********************************item-cart*****************************/
+.item-cart{
+box-sizing: border-box;
+display: flex;
+align-items: center;
+justify-content: space-around;
+background-color: aliceblue;
+width: 100%;
+height: 200px;
+border: solid 2px green;
+}
+.img-box-cart{
+    display: block;
+    width: 25%;
+    height: 190px;
+    border: solid 2px hotpink;
+    border-radius: 10px;
+}
+.cart-name{
+    margin: 0px;
+    color: rebeccapurple;
+
+}
+.text-cont-cart{
+    height: 148px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: -30px;
+}
+.opisanie-cart{
+    font-size: 16px;
+    color: #b2391a;
+    line-height: 18px;
+    text-align: center;
+    border-top: 3px solid violet;
+}
+.discr-cart{
+    color: blueviolet;
+    margin: 0px;
+    font-size: 20px;
+}
+.item-button-cont-cart {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-top: 0px;
+    align-items: center;
+}
+
+.btn-item-cart {
+    height: 42px;
+    width: 42px;
+    background-color: #2daed1;
+    color: #f5e593;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+.price-cart{
+    color: blueviolet;
+    margin: 0px;
+    font-size: 20px;
+}
+.price-cart-d{
+    color: blueviolet;
+    margin: 0px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+.down-cart{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    color: #df12dc;
+}
+.discr-item-cart-d{
+    color: rgb(43, 107, 226);
+    margin: 0px;
+    font-size: 20px;
+}
+/*********************************корзина-кинец************************/
+
 /************************scroll************************/
 ::-webkit-scrollbar-track {
 	background-color: rgb(221, 125, 221); /*Цвет ползунка*/
