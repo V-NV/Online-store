@@ -26,14 +26,18 @@ header{
 .logo-header{
     position: relative;
     margin-left: 1rem;
-    z-index: 5;
-    
-}
-.a-logo{
     text-shadow: 0 0 10px rgb(74 255 34), 0 0 20px #ffedfc, 0 0 30px #d37aff, 0 0 40px #a6ffea;
-    font-size: 130%;
+    font-size: 220%;
     color: #da18f0;
     text-decoration: none;
+    z-index: 5;
+    cursor: pointer;
+    
+}
+.total-cart{
+    width: 300px;
+    text-align: center;
+    margin-right: 100px;
 }
 .header-cart-sum{
     font-size: 150%;
@@ -482,6 +486,7 @@ height: 235px;
 .articl{
     margin-left: 10px;
     font-size: 22px;
+    color: #776abc;
 }
 .paginat-box{
     display: flex;
@@ -509,6 +514,8 @@ height: 235px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-size: 21px;
+    color: #67c377;
 }
 .right-cart-header{
     height: 69px;
@@ -521,17 +528,15 @@ height: 235px;
     border: solid 2px violet;
 }
 .promo-input{
-        display: block;
-        height: 30px;
-        width: 100%;
-        border-radius: 12px;
-        background-color: rgb(241 192 247);
-        font-weight: bold;
-        color: #161409;
-        font-size: 18px;
-        outline: none;
-       
- 
+    display: block;
+    height: 30px;
+    width: 100%;
+    border-radius: 12px;
+    background-color: rgb(241 192 247);
+    font-weight: bold;
+    color: #161409;
+    font-size: 18px;
+    outline: none;
 }
 .btn-buy{
     height: 42px;
@@ -545,6 +550,9 @@ height: 235px;
 .btn-buy:hover{
     background-color: rgb(197, 127, 77);
     
+}
+.btn-buy:disabled{
+    background-color: rgb(186, 197, 197);
 }
 .promotest{
     color: #c59473;
@@ -612,6 +620,17 @@ border: solid 2px green;
     border: none;
     margin-top: 10px;
 }
+.btn-item-cart:hover{
+    background-color: rgb(197, 127, 77);
+}
+.how-item{
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: red;
+    padding-top: 5px;
+}
 .price-cart{
     color: blueviolet;
     margin: 0px;
@@ -649,8 +668,107 @@ border: solid 2px green;
 	width: 8px;  /*Толщина скролла*/
 }
 /************************scroll************************/
-/*----------------------------------------------------*/
-/*----------------------------------------------------*/
+
+/*----------------------------Pay------------------------------*/
+
+.cont-pay {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    width: 25rem;
+    margin: 0 auto;
+}
+
+.form {
+    padding: 20px 20px;
+}
+
+.h2 {
+    text-align: center;
+    margin: 0 0 2rem 0;
+    letter-spacing: 5px;
+}
+.form-control {
+    margin-bottom: 8px;
+    padding-bottom: 20px;
+    position: relative;
+}
+.visa{
+    height: 30px;
+    width:55px;
+}
+.card-wrap {
+    display: block;
+    border: 2px solid #e0e0e0;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    padding: 5px;
+}
+.date-cvv {
+    display: flex;
+}
+.date-cvv .form-control{
+    margin: 0px 5px;
+}
+
+.form-control label {
+    color: #777;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control input {
+    box-sizing: border-box;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+}
+.form-control input:focus::placeholder {
+    visibility: hidden;
+}
+
+.form-control input:focus {
+    outline: 0;
+    border-color: #777;
+}
+
+.form-control.success input {
+    border-color: #2ecc71;
+}
+.form-control.error input {
+    border-color: #e74c3c;
+}
+.form-control small {
+    color: #e74c3c;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+}
+
+.form-control.error small {
+    visibility: visible;
+}
+
+.form-button {
+    outline: 0;
+    border: none;
+    color: #f5e593;
+    background-color: #2daed1;
+    border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.form-button:hover{
+    background-color: rgb(197, 127, 77);
+}
+
+/*--------------------------Pay End-----------------------------*/    
 
 /*----------------------footer------------------------*/
 

@@ -2,6 +2,8 @@ import data from './data.js';
 const view = document.querySelector('.content');
 const SortBy = document.querySelector('#sort-select');//сортировка
 const CartIcon = document.querySelector('.cart');// при клике на корзину
+const Logo = document.querySelector('.logo-header')// для возврата на главную по клику
+const PayOn = document.querySelector('.cont-pay');
 const arrData = data;
 const arrFirst = data.slice();
 let arrCart = [];//массив карзины
@@ -11,6 +13,7 @@ let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
 let arrSmartCheckbox = [];//массив smartfones
 let isCheckOn = false; // состояние чекбокса
+let suma = 0;//сумма товаров в корзине для header
 
 createTable(arrData)//запуск при первой загрузке со всеми товарами 
 
@@ -425,12 +428,12 @@ function OpenCart(){
   const Right = document.querySelector('.right');
   const Footer = document.querySelector('.footer');
    
-  view.classList.add('off')
-  Left.classList.add('off')
-  Right.classList.add('off')
-  Footer.classList.add('foot-down')
-  CartPage.classList.remove('off')
- 
+  view.classList.add('off');
+  Left.classList.add('off');
+  Right.classList.add('off');
+  Footer.classList.add('foot-down');
+  CartPage.classList.remove('off');
+  PayOn.classList.add('off');
     CartPage.innerHTML = '';
     CartPage.innerHTML += `
     <div class="left-cart">
@@ -438,10 +441,10 @@ function OpenCart(){
         <p class="articl">Товаров в корзине</p>
           <div class="paginat-box">
              <div class="item-box">
-                <p>items: <span> 0 </span></p>
+                <p>items: <span> &#8734 </span></p>
              </div>
                 <div class="item-box2">
-                <p>page:<span> &#9664 </span><span>0</span><span> &#9654 </span></p>
+                <p>page:<span> &#9664 </span><span>1</span><span> &#9654 </span></p>
             </div>      
             </div>
     </div>
@@ -450,7 +453,7 @@ function OpenCart(){
 </div>    
 <div class="right-cart">
        <div class="right-cart-header">
-           <p>Итого:</p>
+           <p class="articl">Итого:</p>
        </div>
        <div class="right-cart-content">
          <p>Товаров:</p>
@@ -490,23 +493,231 @@ function OpenCart(){
           
         <div class="item-button-cont-cart">
           <p class="discr-cart">Наличие: ${arrCart[i].stock}</p>
-          <button class="btn-item-cart" id="btn-plus${arrCart[i].id}"> + </button>
-          <button class="btn-item-cart" id="btn-minus${arrCart[i].id}"> - </button>
+          <button class="btn-item-cart" id="btn-add${arrCart[i].id}"> + </button>
+          <div class="how-item" id="${arrCart[i].id}">1</div>
+          <button class="btn-item-cart" id="btn-del${arrCart[i].id}"> - </button>
           <p class="price-cart-d">Цена: $ ${arrCart[i].price}</p>
         </div>
     </div>
     `
+    
   }
+/*********************************добавить удалить товар**************************/
+/*const HowItem = document.querySelector('.how-item');
+const BtnPlusMinus = document.querySelectorAll('.btn-item-cart');
+let countItem = 1;
+let CountAllItem = 1;
+
+for(let el of BtnPlusMinus){
+  el.addEventListener('click', function(e) {
+    
+    let knop = e.target;
+    //console.log(knop,'эта кнопка нажата')
+    let idBtn = knop.id.slice(7);
+console.log(idBtn)
+
+if(knop.id.includes('add')){
+  arrCart.push(arrFirst[idBtn-1])
+  korz.textContent = arrCart.length;
+  suma += +arrFirst[idBtn-1].price;
+  summ.textContent = suma;
+}
+  let textId = knop.id.slice(0,7)
+  //console.log(textId,'textId')
+  if(knop.id.includes('del') && arrCart.length>0) {
+   // console.log(arrCart,'arrCart до фильтра')
+   let temp = [];
+   temp = arrCart.filter((items) => +items.id !== +idBtn)
+   // console.log(arrTemp,'arrTemp')
+   arrCart = temp; 
+   //console.log(arrCart,'arrCart после фильтра')
+   if(isDouble.length){
+   suma = suma - +arrFirst[idBtn-1].price;
+   korz.textContent = arrCart.length;
+   summ.textContent = suma;
+   }
+    }
+  })
+  }*/
+
+
+
+
+
+
+
+
+
+
+/*****************************добавить удалить товар END**************************/
+
+   /**************************************кнопка купить  и пустая корзина********************************/
+  document.querySelector('.btn-buy').disabled = false;
+  if(arrCart.length<1){
+    document.querySelector('.btn-buy').disabled = true;
+    CartItem.innerHTML += `
+    <p class="header-cart-sum">В корзине не товаров</p>
+    <p class="header-cart-sum">Кнопка оплаты активна только при наличии товара в корзине</p>
+    `
+  }
+ /***********************************кнопка купить и пустая корзина END********************************/ 
+  
+ /*********************************оплата***************************/
+
+const Pay = document.querySelector('.btn-buy');
+//const PayOn = document.querySelector('#container-pay');
+
+Pay.addEventListener('click', PayForm)
+
+function PayForm() {
+  
+ // let PayOn = document.querySelector('#container-pay');
+  console.log(PayOn)
+CartPage.classList.add('off')
+PayOn.classList.remove('off');
+console.log(PayOn)
+const form = document.getElementById("form");
+const username = document.getElementById("username");
+const adress = document.getElementById("adress");
+const email = document.getElementById("email");
+const telepfone = document.getElementById("telepfone");
+const cardnumber = document.getElementById("cardnumber");
+const date = document.getElementById("date");
+const cvv = document.getElementById("cvv");
+//regExp
+const eml = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const cv = /^[0-9]{3,4}$/; 
+const mmyy = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/; 
+
+const Validate = (item, messageType, message) => {
+    const formControl = item.parentElement;
+    formControl.className = messageType === "error" ? "form-control error" : "form-control success";
+    if (messageType === "error" && !!message) {
+        const small = formControl.querySelector("small");
+        small.innerHTML = message;
+    }
 };
-/******************добавление/удаление товара в корзину*************/
+function checkUser(username) {
+    if (username.value.toLowerCase().split(' ').length === 2 && username.value.toLowerCase().split(' ')[0].length >=3 && username.value.toLowerCase().split(' ')[1].length >=3) {
+        
+        Validate(username, "success");
+    }
+    else {
+        
+        Validate(username, "error", "Введите два слова от 3 символов каждое ");
+    }
+}
+function checkTelepfone(telepfone) {
+    let aNumber = telepfone.value.toString().split('+').join('')*1;
+    if (telepfone.value.toString()[0] === '+' && telepfone.value.toString().length >= 10 && !isNaN(aNumber) ) {
+        Validate(telepfone, "success");
+    }
+    else {
+      
+        Validate(telepfone, "error", "Формат ввода: +123456789(от 9 цифр после +)");
+    }
+}
+function checkAdres(adress) {
+    if (adress.value.toString().trim().split(' ').length >= 3 && adress.value.toString().split(' ')[0].length >=5 && adress.value.toString().split(' ')[1].length >=5 && adress.value.toString().split(' ')[2].length >=5) {
+       
+        Validate(adress, "success");
+    }
+    else {
+       
+        Validate(adress, "error", "От 3-ёх слов от 5-ти символов каждое");
+    }
+}
+function checkEmail(email) {
+    if (eml.test(email.value.toLowerCase())) {
+       
+        Validate(email, "success");
+    }
+    else {
+       
+        Validate(email, "error", "Формат ввода: email@gmail.com(ru)");
+    }
+}
+
+function checkCard (cardnumber) {
+    let cardN = cardnumber.value.toString().trim().split(' ').join('');
+    if (+cardN.length === 16 && !isNaN(cardN*1)) {
+       //console.log(cardnumber.value.toString().trim().split(' ').join(''))
+        Validate(cardnumber, "success");
+    }
+    else {
+       // console.log(cardnumber.value.toString().trim().split(' ').join('').length)
+        Validate(cardnumber, "error", "Формат ввода:16 цифр");
+    }
+    
+    cardnumber.oninput = function(event){
+      let visa = document.querySelector('.visa');
+      let inp = event.target.value
+      if(+inp[0] === 4){visa.src = 'https://i.pinimg.com/474x/2e/85/de/2e85de7a272291a5f07d8f978a409fc3.jpg'}
+      else if(+inp[0] === 5){visa.src = 'https://image.shutterstock.com/image-photo/image-260nw-277654622.jpg'}
+      else if(+inp[0] === 6){visa.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEcv9Ysyc9Vxe6uHhZptfkRheSF-0zXDRfpn2-fPFK06kY0lgtoicgzGCaNcZFrhYplw&usqp=CAU'}
+         else{visa.src='https://cdn.iconscout.com/icon/premium/png-128-thumb/shopping-payment-1950536-1647158.png'}
+    }
+  
+}
+function checkDate(date) {
+    if (mmyy.test(date.value) && +date.value.toString().length === 4) {
+        let dm = date.value.toString('').split('');
+        date.value = dm[0]+dm[1]+'/'+ +dm[2]+dm[3]
+        Validate(date, "success");
+    }
+    else {
+        Validate(date, "error", "Формат ввода: 0723");
+    }
+}
+function checkCvv(cvv) {
+    if (cv.test(cvv.value.toLowerCase()) && +cvv.value.toString().length === 3) {
+        Validate(cvv, "success");
+    }
+    else {
+        Validate(cvv, "error", "Введите: 3 цифры");
+    }
+}
+const checkRequired = (items) => {
+    items.forEach((item) => {
+        if (item.value.trim() === "") {
+            Validate(item, "error", captializedNameOFInput(item) + " is required");
+        }
+        else {
+            Validate(item, "success");
+        }
+    });
+};
+
+const captializedNameOFInput = (item) => {
+    return item.id[0].toUpperCase() + item.id.slice(1);
+};
+
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    checkRequired([username, adress, email, telepfone, cardnumber, date, cvv]);
+	checkUser(username);
+    checkAdres(adress);
+    checkEmail(email);
+	checkTelepfone(telepfone);
+    checkCard(cardnumber);
+    checkDate(date);
+	checkCvv(cvv);
+  
+});
+}
 
 
+/*********************************оплата END***************************/
+
+};
+/*********************************корзина END***************************/
+ 
+/******************добавление/удаление товара в корзину END*************/
 
 function AddItems(){
 let BtnAddDel = document.querySelectorAll('.btn-item');
 let MainCart = document.querySelector('.cart');
-let suma = 0;
-
+//let suma = 0; вынесенно вверх
 
 for(let el of BtnAddDel){
 el.addEventListener('click', function(e) {
@@ -514,7 +725,7 @@ el.addEventListener('click', function(e) {
   const summ = document.querySelector('.header-summ');
   
   let knop = e.target;
-  console.log(knop,'эта кнопка нажата')
+  //console.log(knop,'эта кнопка нажата')
   let idBtn = knop.id.slice(7);
 
   let isDouble = [];
@@ -525,23 +736,16 @@ if(knop.id.includes('add') && isDouble.length < 1){
     korz.textContent = arrCart.length;
     suma += +arrFirst[idBtn-1].price;
     summ.textContent = suma;
-    
-   
-    }
-  
+  }
     let textId = knop.id.slice(0,7)
-    console.log(textId,'textId')
-    
-  
-   
+    //console.log(textId,'textId')
     if(knop.id.includes('del') && arrCart.length>0) {
-      console.log(arrCart,'arrCart до фильтра')
+     // console.log(arrCart,'arrCart до фильтра')
      let temp = [];
      temp = arrCart.filter((items) => +items.id !== +idBtn)
-      console.log(arrTemp,'arrTemp')
-     //items.id !==idBtn-1);
+     // console.log(arrTemp,'arrTemp')
      arrCart = temp; 
-     console.log(arrCart,'arrCart после фильтра')
+     //console.log(arrCart,'arrCart после фильтра')
      if(isDouble.length){
      suma = suma - +arrFirst[idBtn-1].price;
      korz.textContent = arrCart.length;
@@ -552,13 +756,21 @@ if(knop.id.includes('add') && isDouble.length < 1){
 })
 }
 }
-/********************добавление товара/удаление конец***************/
+/********************LOGO CLICK***************/
+Logo.addEventListener('click',function(){
+  const CartPage = document.querySelector('.cart-page');
+  const Left = document.querySelector('.left');
+  const Right = document.querySelector('.right');
+  const Footer = document.querySelector('.footer');
+  const Popup = document.querySelector('.popup');
 
-
-
-
-/************************удаление товара********************/
-
-/*********************удаление товара конец*****************/
-
-
+  view.classList.remove('off')
+  Left.classList.remove('off')
+  Right.classList.remove('off')
+  Footer.classList.remove('foot-down')
+  CartPage.classList.add('off')
+  Popup.classList.add('off')
+  PayOn.classList.add('off');
+  AddItems()
+})
+/********************LOGO CLICK***************/
