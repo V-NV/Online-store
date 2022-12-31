@@ -1,9 +1,17 @@
 import data from './data.js';
+window.addEventListener('beforeunload', setLocalStorage);
+window.addEventListener('load', getLocalStorage);
 const view = document.querySelector('.content');
 const SortBy = document.querySelector('#sort-select');//сортировка
 const CartIcon = document.querySelector('.cart');// при клике на корзину
 const Logo = document.querySelector('.logo-header')// для возврата на главную по клику
 const PayOn = document.querySelector('.cont-pay');
+const korz = document.querySelector('.cartscore');// число товаров в корзине
+const summ = document.querySelector('.header-summ');//сумма в корзине
+const Reset = document.querySelector('.reset-filter')//кнопка reset
+const Bread = document.querySelector('.item-bread-link');//хлебные возврат
+const Table = document.getElementById("table");
+const List = document.getElementById("list");
 const arrData = data;
 const arrFirst = data.slice();
 let arrCart = [];//массив карзины
@@ -15,9 +23,18 @@ let arrSmartCheckbox = [];//массив smartfones
 let isCheckOn = false; // состояние чекбокса
 let suma = 0;//сумма товаров в корзине для header
 
-createTable(arrData)//запуск при первой загрузке со всеми товарами 
+function LS(){
 
+if(localStorage.getItem('List') === 'true'){
+createList(arrData)//запуск при первой загрузке со всеми товарами 
+  }
+else{
+createTable(arrData)//запуск при первой загрузке со всеми товарами 
+  }
+}
+LS();
 console.log(arrData[0].title)
+console.log(isTable,'isTable')
 /*----------------------отрисовка таблицой---------------------------- */
 
 function createTable(Data) {
@@ -62,7 +79,10 @@ function createTable(Data) {
     }
     isList = false;
     isTable = true;
+    Table.className = 'now';
     
+    //localStorage.setItem('List', JSON.stringify(false))
+    //localStorage.setItem('Table', JSON.stringify(true))
     const a = document.querySelector('.search-result');
     a.textContent = Data.length;
     noItems();
@@ -103,7 +123,9 @@ function createTable(Data) {
         }
         isList = true;
         isTable = false;
-        
+        List.className = 'now';
+        //localStorage.setItem('List', JSON.stringify(true))
+        //localStorage.setItem('Table', JSON.stringify(false))
         const a = document.querySelector('.search-result');
         a.textContent = Data.length;
         noItems();
@@ -117,9 +139,9 @@ function createTable(Data) {
 /*----------------------------------------------------------------------------*/
 
 /*------------------------------swich-table-list------------------------------*/
-const Table = document.getElementById("table");
-const List = document.getElementById("list");
-Table.className = 'now';
+//const Table = document.getElementById("table");
+//const List = document.getElementById("list");
+//Table.className = 'now';
 
 List.addEventListener('click', function(){
     if(!isList && arrCurrient.length < 1) {
@@ -128,6 +150,8 @@ List.addEventListener('click', function(){
       List.className = 'now';
       isList = true;
       isTable = false;
+      localStorage.setItem('List', JSON.stringify(true))
+      localStorage.setItem('Table', JSON.stringify(false))
     }
     if(!isList && arrCurrient.length > 0) {
       createList(arrCurrient)
@@ -135,6 +159,8 @@ List.addEventListener('click', function(){
       List.className = 'now';
       isList = true;
       isTable = false;
+      localStorage.setItem('List', JSON.stringify(true))
+      localStorage.setItem('Table', JSON.stringify(false))
     }
 });
 
@@ -146,6 +172,8 @@ Table.addEventListener('click', function(){
     List.className = '';
     isList = false;
     isTable = true;
+    localStorage.setItem('List', JSON.stringify(false))
+    localStorage.setItem('Table', JSON.stringify(true))
   }
   if(!isTable && arrCurrient.length > 0) {
     createTable(arrCurrient)
@@ -153,6 +181,8 @@ Table.addEventListener('click', function(){
     List.className = '';
     isList = false;
     isTable = true;
+    localStorage.setItem('List', JSON.stringify(false))
+    localStorage.setItem('Table', JSON.stringify(true))
   }
 });
 
@@ -312,7 +342,7 @@ function PopupOn(){
   const Right = document.querySelector('.right');
   const Footer = document.querySelector('.footer');
   const Popup = document.querySelector('.popup');
-
+  
   
   let elements = [];
   if(isTable){elements = itemPopup}
@@ -333,6 +363,16 @@ function PopupOn(){
 
     Popup.innerHTML = '';
     Popup.innerHTML += `
+    <div class="bread-cont">
+       <p class="item-bread-link">STORE</p>
+       <p class="item-bread-u">\>\></p>
+       <p class="item-bread">${arrFirst[ID].category}</p>
+       <p class="item-bread-u">\>\></p>
+       <p class="item-bread">${arrFirst[ID].brand}</p>
+       <p class="item-bread-u">\>\></p>
+       <p class="item-bread">${arrFirst[ID].title}</p>
+
+    </div>
     <div class="item-pop" id="${ID}}">
          <div class="exit">х</div>
          <h2 class="item-name-pop">${arrFirst[ID].title}</h2>
@@ -359,7 +399,9 @@ function PopupOn(){
     `
     const Mov = document.querySelector('.item-image-pop');
     const btnChange = document.getElementById('left-arrow');
-       
+    const Bread = document.querySelector('.item-bread-link');
+    Bread.addEventListener('click',Hleb);
+
     let arrImg = arrFirst[ID].images;
       
     let count = 0;
@@ -427,13 +469,18 @@ function OpenCart(){
   const Left = document.querySelector('.left');
   const Right = document.querySelector('.right');
   const Footer = document.querySelector('.footer');
+  const popup = document.querySelector('.popup')
    
+   korz.textContent = arrCart.length;// отображение товаров в корзине
+
   view.classList.add('off');
   Left.classList.add('off');
   Right.classList.add('off');
   Footer.classList.add('foot-down');
   CartPage.classList.remove('off');
   PayOn.classList.add('off');
+  popup.classList.add('off')
+
     CartPage.innerHTML = '';
     CartPage.innerHTML += `
     <div class="left-cart">
@@ -456,8 +503,8 @@ function OpenCart(){
            <p class="articl">Итого:</p>
        </div>
        <div class="right-cart-content">
-         <p>Товаров:</p>
-         <p>Сумма</p>
+         <p>Товаров:<span class=right-how>0</span></p>
+         <p>Сумма: <span class="SM">0</span></p>
          <div class="sort">
          <div>
             <input class="promo-input" id="input" placeholder="Введите промо код" autofocus="">
@@ -493,64 +540,20 @@ function OpenCart(){
           
         <div class="item-button-cont-cart">
           <p class="discr-cart">Наличие: ${arrCart[i].stock}</p>
-          <button class="btn-item-cart" id="btn-add${arrCart[i].id}"> + </button>
-          <div class="how-item" id="${arrCart[i].id}">1</div>
-          <button class="btn-item-cart" id="btn-del${arrCart[i].id}"> - </button>
-          <p class="price-cart-d">Цена: $ ${arrCart[i].price}</p>
+          <button class="btn-item-cart" id="btn-add${arrCart[i].id}" value="1"> + </button>
+          <div class="how-item" id="${arrCart[i].id}" value="1">1</div>
+          <button class="btn-item-cart" id="btn-del${arrCart[i].id}" value="1"> - </button>
+          <p class="price-cart-d" id="${arrCart[i].price}">Цена: $ ${arrCart[i].price}</p>
         </div>
     </div>
     `
-    
+    const RightHow = document.querySelector('.right-how');// товаров всего
+    RightHow.textContent = arrCart.length;
+    const SM = document.querySelector('.SM');// товаров всего
+    SM.textContent = summ.textContent;
+
+   changePlusMinus();//функция кнопок +- в корзине
   }
-/*********************************добавить удалить товар**************************/
-/*const HowItem = document.querySelector('.how-item');
-const BtnPlusMinus = document.querySelectorAll('.btn-item-cart');
-let countItem = 1;
-let CountAllItem = 1;
-
-for(let el of BtnPlusMinus){
-  el.addEventListener('click', function(e) {
-    
-    let knop = e.target;
-    //console.log(knop,'эта кнопка нажата')
-    let idBtn = knop.id.slice(7);
-console.log(idBtn)
-
-if(knop.id.includes('add')){
-  arrCart.push(arrFirst[idBtn-1])
-  korz.textContent = arrCart.length;
-  suma += +arrFirst[idBtn-1].price;
-  summ.textContent = suma;
-}
-  let textId = knop.id.slice(0,7)
-  //console.log(textId,'textId')
-  if(knop.id.includes('del') && arrCart.length>0) {
-   // console.log(arrCart,'arrCart до фильтра')
-   let temp = [];
-   temp = arrCart.filter((items) => +items.id !== +idBtn)
-   // console.log(arrTemp,'arrTemp')
-   arrCart = temp; 
-   //console.log(arrCart,'arrCart после фильтра')
-   if(isDouble.length){
-   suma = suma - +arrFirst[idBtn-1].price;
-   korz.textContent = arrCart.length;
-   summ.textContent = suma;
-   }
-    }
-  })
-  }*/
-
-
-
-
-
-
-
-
-
-
-/*****************************добавить удалить товар END**************************/
-
    /**************************************кнопка купить  и пустая корзина********************************/
   document.querySelector('.btn-buy').disabled = false;
   if(arrCart.length<1){
@@ -565,6 +568,7 @@ if(knop.id.includes('add')){
  /*********************************оплата***************************/
 
 const Pay = document.querySelector('.btn-buy');
+
 //const PayOn = document.querySelector('#container-pay');
 
 Pay.addEventListener('click', PayForm)
@@ -572,10 +576,10 @@ Pay.addEventListener('click', PayForm)
 function PayForm() {
   
  // let PayOn = document.querySelector('#container-pay');
-  console.log(PayOn)
+  //console.log(PayOn)
 CartPage.classList.add('off')
 PayOn.classList.remove('off');
-console.log(PayOn)
+//console.log(PayOn)
 const form = document.getElementById("form");
 const username = document.getElementById("username");
 const adress = document.getElementById("adress");
@@ -588,22 +592,26 @@ const cvv = document.getElementById("cvv");
 const eml = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const cv = /^[0-9]{3,4}$/; 
 const mmyy = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/; 
-
+let a,b,c,d,e,f,g,h = 0;
 const Validate = (item, messageType, message) => {
     const formControl = item.parentElement;
     formControl.className = messageType === "error" ? "form-control error" : "form-control success";
     if (messageType === "error" && !!message) {
         const small = formControl.querySelector("small");
         small.innerHTML = message;
-    }
+        console.log(formControl.className)
+        if(!formControl.className.includes('er')){Submit()}
+   }
+   
 };
 function checkUser(username) {
     if (username.value.toLowerCase().split(' ').length === 2 && username.value.toLowerCase().split(' ')[0].length >=3 && username.value.toLowerCase().split(' ')[1].length >=3) {
         
         Validate(username, "success");
+        a = 1;
     }
     else {
-        
+        a = 0;
         Validate(username, "error", "Введите два слова от 3 символов каждое ");
     }
 }
@@ -611,29 +619,30 @@ function checkTelepfone(telepfone) {
     let aNumber = telepfone.value.toString().split('+').join('')*1;
     if (telepfone.value.toString()[0] === '+' && telepfone.value.toString().length >= 10 && !isNaN(aNumber) ) {
         Validate(telepfone, "success");
+        b=1;
     }
     else {
-      
+      b=0;
         Validate(telepfone, "error", "Формат ввода: +123456789(от 9 цифр после +)");
     }
 }
 function checkAdres(adress) {
     if (adress.value.toString().trim().split(' ').length >= 3 && adress.value.toString().split(' ')[0].length >=5 && adress.value.toString().split(' ')[1].length >=5 && adress.value.toString().split(' ')[2].length >=5) {
-       
+       c=1;
         Validate(adress, "success");
     }
     else {
-       
+       c = 0;
         Validate(adress, "error", "От 3-ёх слов от 5-ти символов каждое");
     }
 }
 function checkEmail(email) {
     if (eml.test(email.value.toLowerCase())) {
-       
+       d=1;
         Validate(email, "success");
     }
     else {
-       
+       d=0;
         Validate(email, "error", "Формат ввода: email@gmail.com(ru)");
     }
 }
@@ -643,8 +652,10 @@ function checkCard (cardnumber) {
     if (+cardN.length === 16 && !isNaN(cardN*1)) {
        //console.log(cardnumber.value.toString().trim().split(' ').join(''))
         Validate(cardnumber, "success");
+        e = 1;
     }
     else {
+      e = 0;
        // console.log(cardnumber.value.toString().trim().split(' ').join('').length)
         Validate(cardnumber, "error", "Формат ввода:16 цифр");
     }
@@ -664,16 +675,20 @@ function checkDate(date) {
         let dm = date.value.toString('').split('');
         date.value = dm[0]+dm[1]+'/'+ +dm[2]+dm[3]
         Validate(date, "success");
+        g = 1;
     }
     else {
+      g = 0;
         Validate(date, "error", "Формат ввода: 0723");
     }
 }
 function checkCvv(cvv) {
     if (cv.test(cvv.value.toLowerCase()) && +cvv.value.toString().length === 3) {
         Validate(cvv, "success");
+        h = 1
     }
     else {
+      h = 0;
         Validate(cvv, "error", "Введите: 3 цифры");
     }
 }
@@ -684,15 +699,16 @@ const checkRequired = (items) => {
         }
         else {
             Validate(item, "success");
-        }
+         }
     });
 };
 
 const captializedNameOFInput = (item) => {
-    return item.id[0].toUpperCase() + item.id.slice(1);
+     return item.id[0].toUpperCase() + item.id.slice(1);
 };
 
 form.addEventListener("submit", function (e) {
+  //console.log(a+b+c+d+e+f+g+h)
     e.preventDefault();
     checkRequired([username, adress, email, telepfone, cardnumber, date, cvv]);
 	checkUser(username);
@@ -702,8 +718,10 @@ form.addEventListener("submit", function (e) {
     checkCard(cardnumber);
     checkDate(date);
 	checkCvv(cvv);
-  
+ 
 });
+
+
 }
 
 
@@ -711,7 +729,119 @@ form.addEventListener("submit", function (e) {
 
 };
 /*********************************корзина END***************************/
+
+
+/*********************************добавить удалить товар внутри корзины**************************/
+
+function changePlusMinus(){
+const HowItem = document.querySelectorAll('.how-item');//между + и -
+const BtnPlusMinus = document.querySelectorAll('.btn-item-cart');
+const RightHow = document.querySelector('.right-how');// товаров всего
+RightHow.textContent = arrCart.length;
+
+for(let how of HowItem){
+  how.value = 1;//для исключения NAN
+}
+
+let knopcount = 0;
+
+for(let el of BtnPlusMinus){//перебор кнопок
+  
+  el.addEventListener('click', function(e) {//по нажатию на кнопку +-
+
+    
+    let knop = e.target;
+    //let idBtn = knop.id.slice(7);//id кнопки только цифры
+    console.log(knop,'эта кнопка нажата')
+    
+    
+    if(knop.id.includes('add')){// цикл для кнопок +
+      console.log(el.value,'knop value')
+      let knopcount = +el.value;//присвоение в счетчик текущего значения
+      ++knopcount;//увеличение на 1
+      el.value = knopcount; //присвоение увеличенного
+          for(let plus of HowItem ){//перебор всех полей между между кнопок +-
+            if(+plus.id === +el.id.slice(7)){
+              plus.textContent = el.value// отображение текущего Value в поле между +-
+              plus.value = el.value;
+      console.log(plus.id,'+id')
+      console.log(el.id.slice(7),'el id slice')
+      console.log(plus.value,'plus value')
+
+    }
+  }
+}
+
+if(knop.id.includes('del')){// цикл для кнопок -
+  for(let minus of HowItem ){//перебор всех полей между между кнопок +-
+    if(+minus.id === +el.id.slice(7)){
+      console.log(el.value,'до клика на минус')
+      let knopcountM = +minus.value;//присвоение в счетчик текущего значения поля между + и -
+      knopcountM = +knopcountM - 1;//уменьшение на 1
+      el.value = knopcountM; //присвоение уменьшенного
+      minus.value = knopcountM;// присвоение текущего значение после вычета
+      minus.textContent = knopcountM;//отображение текущего значения после вычета
+    }
  
+   console.log(el.value,'после клика на минус')
+      if(+el.value === 0 || isNaN(el.value)){//удаление товара если 0
+        let tempArr = [];
+        tempArr = arrCart.filter((item)=> +item.id !== +el.id.slice(7));
+        arrCart = tempArr;
+        if(arrCart.length < 1){summ.textContent = 0}
+        OpenCart();
+
+      }
+ 
+  }
+}
+/******************************отображение итого товаров и суммы ********************************/
+
+ const PriceItem = document.querySelectorAll('.price-cart-d');
+ const RightHow = document.querySelector('.right-how');//между + и -
+ const HSUMM = document.querySelector('.header-summ');
+const SM = document.querySelector('.SM');
+
+ RightHow.textContent = arrCart.length;
+ let Preitog = 0;
+ for(let itog of HowItem ){//перебор всех полей между между кнопок +-
+ // console.log(itog.value)
+  let transf = +itog.value;
+  Preitog += transf;
+  console.log(Preitog,'preitog')
+  RightHow.textContent = Preitog
+
+}
+
+let PrePrice = 0;
+ for(let price of PriceItem ){//перебор всех полей между между кнопок +-
+  console.log(price.id*1)
+  let priceC = +price.id*1;
+  PrePrice += priceC;
+  console.log(PrePrice*1,'PrePrice')
+ 
+  HSUMM.textContent = PrePrice;
+  SM.textContent = PrePrice;
+  //RightHow.textContent = Preitog
+}
+ 
+
+
+
+
+/******************************отображение итого товаров и суммы ********************************/
+
+
+
+  })
+  }
+ 
+}
+
+/*****************************добавить удалить товар внутри корзины END**************************/
+
+
+
 /******************добавление/удаление товара в корзину END*************/
 
 function AddItems(){
@@ -721,8 +851,8 @@ let MainCart = document.querySelector('.cart');
 
 for(let el of BtnAddDel){
 el.addEventListener('click', function(e) {
-  const korz = document.querySelector('.cartscore');
-  const summ = document.querySelector('.header-summ');
+  //const korz = document.querySelector('.cartscore');//вынесено вверх
+ // const summ = document.querySelector('.header-summ');//вынесено вверх
   
   let knop = e.target;
   //console.log(knop,'эта кнопка нажата')
@@ -772,5 +902,115 @@ Logo.addEventListener('click',function(){
   Popup.classList.add('off')
   PayOn.classList.add('off');
   AddItems()
-})
+});
+
 /********************LOGO CLICK***************/
+function Hleb(){
+  const CartPage = document.querySelector('.cart-page');
+  const Left = document.querySelector('.left');
+  const Right = document.querySelector('.right');
+  const Footer = document.querySelector('.footer');
+  const Popup = document.querySelector('.popup');
+
+  view.classList.remove('off')
+  Left.classList.remove('off')
+  Right.classList.remove('off')
+  Footer.classList.remove('foot-down')
+  CartPage.classList.add('off')
+  Popup.classList.add('off')
+  PayOn.classList.add('off');
+  AddItems()
+};
+
+
+
+
+
+
+/*****************bread click End**************/
+
+/**********************кнопка rest *****************************/
+
+function Submit(){
+  
+  const CartPage = document.querySelector('.cart-page');
+  const Left = document.querySelector('.left');
+  const Right = document.querySelector('.right');
+  const Footer = document.querySelector('.footer');
+  const Popup = document.querySelector('.popup');
+
+  view.classList.remove('off')
+  Left.classList.remove('off')
+  Right.classList.remove('off')
+  Footer.classList.remove('foot-down')
+  CartPage.classList.add('off')
+  Popup.classList.add('off')
+  PayOn.classList.add('off');
+  let arrCart = [];//массив карзины
+  let arrTemp = [];//для первого вызванного фильтра
+  
+  isTable = true;//текущее отображение страницы
+  isList = false;//текущее отображение страницы
+  arrSmartCheckbox = [];//массив smartfones
+  isCheckOn = false; // состояние чекбокса
+  suma = 0;//сумма товаров в корзине для header
+  korz.textContent = 0
+  summ.textContent = 0
+  searchInput.value = ''
+  SortBy.value = ''
+  CheckSmart.checked = false
+  CheckNout.checked = false
+  CheckShirt.checked = false
+  CheckWatch.checked = false
+  arrCart = [];
+  createTable(arrFirst)
+  location.href = './index.html'
+  
+}
+Reset.addEventListener('click', function(){
+  Submit();
+})
+/**********************кнопка reset *****************************/
+
+/************************localStorag******************************/
+
+/*--------------set-----local----storage----------- */
+
+function setLocalStorage() {
+  
+    let a = isTable //текущее значение
+    localStorage.setItem('Table', JSON.stringify(a));
+    
+   
+    let b = isList
+    localStorage.setItem('List', JSON.stringify(b));
+   // console.log(isTable,'set isTable')
+   // console.log(isList,'set isList')
+}
+
+/*-------------get--local--storage----------- */
+function getLocalStorage() {
+    
+  let p = localStorage.getItem('Table');
+  if(p){
+  isTable = JSON.parse(p)
+ // console.log(isTable,'get isTable')
+  }
+ else{
+  isTable = JSON.parse(p)
+ // console.log(isTable,'get isTable')
+  }
+
+  let l = localStorage.getItem('List');
+  if(l){
+  isList = JSON.parse(l)
+ // console.log(isList,'get isList')
+  }
+  else{
+  isList = JSON.parse(l)
+ // console.log(isList,'get isList')
+  } 
+    }
+   /*-------------------end--local--storage------ */
+
+/************************localStorag******************************/
