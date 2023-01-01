@@ -387,6 +387,7 @@ function PopupOn(){
         <li class="item-discr">Скидка: ${arrFirst[ID].discountPercentage} %</li>
         <li class="item-discr">Количество: ${arrFirst[ID].stock}</li>
         <li class="item-price">Цена: $ ${arrFirst[ID].price}</li>
+        <div class="buy-now" id="${arrFirst[ID].id}">Купить</div>
        <div class="arrow" id="left-arrow">&#8644</div>
       </div>
       </div>
@@ -442,6 +443,34 @@ function PopupOn(){
     ZoomImg.addEventListener('mouseout', function(){
          ZoomImg.classList.remove('item-image-pop-on');
      })
+
+    
+     /*----------------------------------Быстрая оплата---------------------------------*/
+     const QuickPay = document.querySelector('.buy-now');
+     QuickPay.addEventListener('click',Quick);
+
+function Quick(){
+  console.log(QuickPay)
+let TempQ = [];
+let Qid = +QuickPay.id 
+TempQ = arrCart.filter((tov)=> +QuickPay.id === +tov.id)
+if(TempQ.length > 0){
+  console.log('больше')
+  OpenCart()
+ 
+}
+if(TempQ.length === 0){
+  console.log('ноль')
+  arrCart.push(arrFirst[Qid-1])
+
+PayForm2()
+  console.log(arrCart)
+  
+}
+}     
+
+
+/*-------------------------------- Быстрая оплата End------------------------------*/
   AddItems();
   
     const Exit = document.querySelector('.exit');
@@ -455,11 +484,15 @@ function PopupOn(){
       Popup.innerHTML = '';
    
   })
-})
+});
   }
+
+  
 }
 
 /*--------------------------------Карточки попап-End-------------------------------*/
+
+
 
 /*-------------------------------------корзина-------------------------------------*/
 CartIcon.addEventListener('click',OpenCart);
@@ -568,18 +601,11 @@ function OpenCart(){
  /*********************************оплата***************************/
 
 const Pay = document.querySelector('.btn-buy');
-
-//const PayOn = document.querySelector('#container-pay');
-
 Pay.addEventListener('click', PayForm)
 
 function PayForm() {
-  
- // let PayOn = document.querySelector('#container-pay');
-  //console.log(PayOn)
 CartPage.classList.add('off')
 PayOn.classList.remove('off');
-//console.log(PayOn)
 const form = document.getElementById("form");
 const username = document.getElementById("username");
 const adress = document.getElementById("adress");
@@ -592,68 +618,54 @@ const cvv = document.getElementById("cvv");
 const eml = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const cv = /^[0-9]{3,4}$/; 
 const mmyy = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/; 
-let a,b,c,d,e,f,g,h = 0;
 const Validate = (item, messageType, message) => {
     const formControl = item.parentElement;
     formControl.className = messageType === "error" ? "form-control error" : "form-control success";
     if (messageType === "error" && !!message) {
         const small = formControl.querySelector("small");
         small.innerHTML = message;
-        console.log(formControl.className)
-        if(!formControl.className.includes('er')){Submit()}
-   }
-   
+       }
 };
 function checkUser(username) {
     if (username.value.toLowerCase().split(' ').length === 2 && username.value.toLowerCase().split(' ')[0].length >=3 && username.value.toLowerCase().split(' ')[1].length >=3) {
         
         Validate(username, "success");
-        a = 1;
     }
     else {
-        a = 0;
-        Validate(username, "error", "Введите два слова от 3 символов каждое ");
+       Validate(username, "error", "Введите два слова от 3 символов каждое ");
     }
 }
 function checkTelepfone(telepfone) {
     let aNumber = telepfone.value.toString().split('+').join('')*1;
     if (telepfone.value.toString()[0] === '+' && telepfone.value.toString().length >= 10 && !isNaN(aNumber) ) {
         Validate(telepfone, "success");
-        b=1;
-    }
+   }
     else {
-      b=0;
-        Validate(telepfone, "error", "Формат ввода: +123456789(от 9 цифр после +)");
+      Validate(telepfone, "error", "Формат ввода: +123456789(от 9 цифр после +)");
     }
 }
 function checkAdres(adress) {
     if (adress.value.toString().trim().split(' ').length >= 3 && adress.value.toString().split(' ')[0].length >=5 && adress.value.toString().split(' ')[1].length >=5 && adress.value.toString().split(' ')[2].length >=5) {
-       c=1;
-        Validate(adress, "success");
+      Validate(adress, "success");
     }
     else {
-       c = 0;
-        Validate(adress, "error", "От 3-ёх слов от 5-ти символов каждое");
+      Validate(adress, "error", "От 3-ёх слов от 5-ти символов каждое");
     }
 }
 function checkEmail(email) {
     if (eml.test(email.value.toLowerCase())) {
-       d=1;
-        Validate(email, "success");
+       Validate(email, "success");
     }
     else {
-       d=0;
-        Validate(email, "error", "Формат ввода: email@gmail.com(ru)");
+       Validate(email, "error", "Формат ввода: email@gmail.com(ru)");
     }
 }
 
 function checkCard (cardnumber) {
     let cardN = cardnumber.value.toString().trim().split(' ').join('');
     if (+cardN.length === 16 && !isNaN(cardN*1)) {
-       //console.log(cardnumber.value.toString().trim().split(' ').join(''))
-        Validate(cardnumber, "success");
-        e = 1;
-    }
+              Validate(cardnumber, "success");
+   }
     else {
       e = 0;
        // console.log(cardnumber.value.toString().trim().split(' ').join('').length)
@@ -675,30 +687,33 @@ function checkDate(date) {
         let dm = date.value.toString('').split('');
         date.value = dm[0]+dm[1]+'/'+ +dm[2]+dm[3]
         Validate(date, "success");
-        g = 1;
-    }
+       }
     else {
-      g = 0;
-        Validate(date, "error", "Формат ввода: 0723");
+         Validate(date, "error", "Формат ввода: 0723");
     }
 }
 function checkCvv(cvv) {
     if (cv.test(cvv.value.toLowerCase()) && +cvv.value.toString().length === 3) {
         Validate(cvv, "success");
-        h = 1
     }
     else {
-      h = 0;
-        Validate(cvv, "error", "Введите: 3 цифры");
+      Validate(cvv, "error", "Введите: 3 цифры");
     }
 }
+
 const checkRequired = (items) => {
+  let schet = 0;
     items.forEach((item) => {
         if (item.value.trim() === "") {
             Validate(item, "error", captializedNameOFInput(item) + " is required");
-        }
+            }
         else {
             Validate(item, "success");
+            schet += 1;
+            if(+schet === 7){  
+            
+            setTimeout(() => Submit(), 2000);
+            }
          }
     });
 };
@@ -708,8 +723,7 @@ const captializedNameOFInput = (item) => {
 };
 
 form.addEventListener("submit", function (e) {
-  //console.log(a+b+c+d+e+f+g+h)
-    e.preventDefault();
+     e.preventDefault();
     checkRequired([username, adress, email, telepfone, cardnumber, date, cvv]);
 	checkUser(username);
     checkAdres(adress);
@@ -718,18 +732,155 @@ form.addEventListener("submit", function (e) {
     checkCard(cardnumber);
     checkDate(date);
 	checkCvv(cvv);
- 
-});
-
-
+  });
 }
+
+
 
 
 /*********************************оплата END***************************/
 
 };
 /*********************************корзина END***************************/
-
+/**pf2 */
+function PayForm2() {
+ const Cp = document.querySelector('.popup');
+ Cp.classList.add('off')
+ PayOn.classList.remove('off');
+ korz.textContent = arrCart.length;
+ const form = document.getElementById("form");
+ const username = document.getElementById("username");
+ const adress = document.getElementById("adress");
+ const email = document.getElementById("email");
+ const telepfone = document.getElementById("telepfone");
+ const cardnumber = document.getElementById("cardnumber");
+ const date = document.getElementById("date");
+ const cvv = document.getElementById("cvv");
+ //regExp
+ const eml = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+ const cv = /^[0-9]{3,4}$/; 
+ const mmyy = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/; 
+ const Validate = (item, messageType, message) => {
+     const formControl = item.parentElement;
+     formControl.className = messageType === "error" ? "form-control error" : "form-control success";
+     if (messageType === "error" && !!message) {
+         const small = formControl.querySelector("small");
+         small.innerHTML = message;
+    }
+    
+ };
+ function checkUser(username) {
+     if (username.value.toLowerCase().split(' ').length === 2 && username.value.toLowerCase().split(' ')[0].length >=3 && username.value.toLowerCase().split(' ')[1].length >=3) {
+         
+         Validate(username, "success");
+    }
+     else {
+          Validate(username, "error", "Введите два слова от 3 символов каждое ");
+     }
+ }
+ function checkTelepfone(telepfone) {
+     let aNumber = telepfone.value.toString().split('+').join('')*1;
+     if (telepfone.value.toString()[0] === '+' && telepfone.value.toString().length >= 10 && !isNaN(aNumber) ) {
+         Validate(telepfone, "success");
+          }
+     else {
+           Validate(telepfone, "error", "Формат ввода: +123456789(от 9 цифр после +)");
+     }
+ }
+ function checkAdres(adress) {
+     if (adress.value.toString().trim().split(' ').length >= 3 && adress.value.toString().split(' ')[0].length >=5 && adress.value.toString().split(' ')[1].length >=5 && adress.value.toString().split(' ')[2].length >=5) {
+         Validate(adress, "success");
+     }
+     else {
+         Validate(adress, "error", "От 3-ёх слов от 5-ти символов каждое");
+     }
+ }
+ function checkEmail(email) {
+     if (eml.test(email.value.toLowerCase())) {
+         Validate(email, "success");
+     }
+     else {
+         Validate(email, "error", "Формат ввода: email@gmail.com(ru)");
+     }
+ }
+ 
+ function checkCard (cardnumber) {
+     let cardN = cardnumber.value.toString().trim().split(' ').join('');
+     if (+cardN.length === 16 && !isNaN(cardN*1)) {
+              Validate(cardnumber, "success");
+      }
+     else {
+        Validate(cardnumber, "error", "Формат ввода:16 цифр");
+     }
+     
+     cardnumber.oninput = function(event){
+       let visa = document.querySelector('.visa');
+       let inp = event.target.value
+       if(+inp[0] === 4){visa.src = 'https://i.pinimg.com/474x/2e/85/de/2e85de7a272291a5f07d8f978a409fc3.jpg'}
+       else if(+inp[0] === 5){visa.src = 'https://image.shutterstock.com/image-photo/image-260nw-277654622.jpg'}
+       else if(+inp[0] === 6){visa.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEcv9Ysyc9Vxe6uHhZptfkRheSF-0zXDRfpn2-fPFK06kY0lgtoicgzGCaNcZFrhYplw&usqp=CAU'}
+          else{visa.src='https://cdn.iconscout.com/icon/premium/png-128-thumb/shopping-payment-1950536-1647158.png'}
+     }
+   
+ }
+ function checkDate(date) {
+     if (mmyy.test(date.value) && +date.value.toString().length === 4) {
+         let dm = date.value.toString('').split('');
+         date.value = dm[0]+dm[1]+'/'+ +dm[2]+dm[3]
+         Validate(date, "success");
+       
+     }
+     else {
+       
+         Validate(date, "error", "Формат ввода: 0723");
+     }
+ }
+ function checkCvv(cvv) {
+     if (cv.test(cvv.value.toLowerCase()) && +cvv.value.toString().length === 3) {
+         Validate(cvv, "success");
+         
+     }
+     else {
+         Validate(cvv, "error", "Введите: 3 цифры");
+     }
+ }
+ const checkRequired = (items) => {
+   let schet2 = 0;
+     items.forEach((item) => {
+         if (item.value.trim() === "") {
+             Validate(item, "error", captializedNameOFInput(item) + " is required");
+         }
+         else {
+             Validate(item, "success");
+             schet2 += 1;
+            if(+schet2 === 7){  
+            
+            setTimeout(() => Submit(), 2000);
+            }
+          }
+     });
+ };
+ 
+ const captializedNameOFInput = (item) => {
+      return item.id[0].toUpperCase() + item.id.slice(1);
+ };
+ 
+ form.addEventListener("submit", function (e) {
+       e.preventDefault();
+     checkRequired([username, adress, email, telepfone, cardnumber, date, cvv]);
+   checkUser(username);
+     checkAdres(adress);
+     checkEmail(email);
+   checkTelepfone(telepfone);
+     checkCard(cardnumber);
+     checkDate(date);
+   checkCvv(cvv);
+  
+ });
+ 
+ 
+ }
+/*pf2-end*
 
 /*********************************добавить удалить товар внутри корзины**************************/
 
@@ -1014,3 +1165,4 @@ function getLocalStorage() {
    /*-------------------end--local--storage------ */
 
 /************************localStorag******************************/
+/**************************** */
