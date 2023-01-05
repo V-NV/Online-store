@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--<link rel="stylesheet" type="css" href="../Soda/public/normalize.css">-->
+    <link rel="stylesheet"  href="./styles.css" type="text/css">
+    <title>Online-store</title>
+</head>
+<body>
+    <header>
+       <div class="cont-header">
+          <h1 class="logo-header">Online-store</h1>
+          <div class="total-cart">
+              <p class="header-cart-sum">Сумма в корзине: 
+                <span class="header-summ">0</span>
+              </p>
+          </div>
+          <div class="cart"><p class="cartscore">0</p></div>
+       </div>
+    </header>
+    <main class="main">
+      
+        <section class="left">
+           <div class="up-button-left-cont">
+               <button class="reset-filter">reset filter</button>
+               <button class="copy-link">copy link</button>
+           </div>
+           <div class="midle-left-cont">Категории
+               <div class="category" id="category">
+                   <div class="checkbox-cont">
+                      <label for="smart">Смартфоны</label>
+                         <input type="checkbox" id="smart" value="smart"/>
+                   </div>
+                   <div class="checkbox-cont">
+                     <label for="nout">Ноутбуки</label>
+                        <input type="checkbox" id="nout" value="nout"/>
+                   </div>
+                   <div class="checkbox-cont">   
+                     <label for="shirt">Футболки</label>
+                        <input type="checkbox" id="shirt" value="shirt"/>
+                      </div> 
+                    <div class="checkbox-cont">   
+                     <label for="watch">Часы</label>
+                        <input type="checkbox" id="watch" value="watch"/>
+                    </div> 
+               </div>
+           </div>
+               <div class="madein">Год</div>
+
+           </div>
+           <div class="bottom-left-cont">
+          </div>    
+       </section>
+       
+       <div class="popup off" id="popup">
+
+      </div><!-- попап-->
+    
+       <div class="cart-page off">
+        
+      </div><!-- корзина-->
+
+       <div class="cont-pay off">
+          <form class="form" id="form">
+            <p class="h2">Оплата товара</p>
+            <div class="form-control">
+              <label for="username"> Имя Фамилия</label>
+              <input type="text" id="username" placeholder="Введите имя и фамилию" />
+              <small>Ошибка</small>
+            </div>
+            <div class="form-control">
+              <label for="telepfone"> Номер телефона</label>
+              <input type="text" id="telepfone" placeholder="Введите номер телефона" />
+              <small>Ошибка</small>
+            </div>
+            <div class="form-control">
+              <label for="adress"> Адрес доставки</label>
+              <input type="text" id="adress" placeholder="Введите адрес" />
+              <small>Ошибка</small>
+            </div>
+            <div class="form-control">
+              <label for="email"> Email</label>
+              <input type="text" id="email" placeholder="Введите Email" />
+              <small>Ошибка</small>
+            </div>
+            <div class="card-wrap">
+              <div class="form-control">
+                <img src="https://cdn.iconscout.com/icon/premium/png-128-thumb/shopping-payment-1950536-1647158.png" class='visa' alt="LOGO">
+                <label for="cardnumber"> Номер карты 4-visa 5-master card 6-мир</label>
+                <input type="text" id="cardnumber" placeholder="Введите номер карты" />
+                <small>Ошибка</small>
+              </div>
+              <div class="date-cvv">
+                <div class="form-control">
+                  <label for="date"> Срок действия</label>
+                  <input type="text" id="date" placeholder="Введите месяц год" />
+                  <small>Ошибка</small>
+                </div>
+                <div class="form-control">
+                  <label for="cvv"> Cvv код</label>
+                  <input type="text" id="cvv" placeholder="Введите код" />
+                  <small>Ошибка</small>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="form-button" id="form-button">
+              Оплатить
+            </button>
+          </form>
+        </div>
+      <!--</section>-->
+       <section class="right">
+           <div class="up-right-cont">
+              <div class="sort">
+                <input class="sort-input" id="input" placeholder="Введите запрос" autofocus="">
+              </div>
+              <div class="found">
+                Нашлось: <span class="search-result">0</span>
+              </div>
+              <div class="search">
+                <div class="search-select-cont"> 
+                  <select class="select" name="sort-select" id="sort-select">
+                    <option class="opt" value="">Выберите сортировку</option>
+                    <option value="a-z">по названию A-Z</option>
+                    <option value="z-a">по названию Z-A</option>
+                    <option value="from-min">по возрастанию цены</option>
+                    <option value="from-max">по убыванию цены</option>
+                  </select>
+                </div>
+              </div>
+              <div class="view">
+                <img src="./icon-list.png" alt="list" class="list" id="list">
+                <img src="./table40.png" alt="table" class="table" id="table">
+              </div>
+           </div>
+           <div class="no-items off">
+            <p>Товаров по заданным</p>
+            <p>условиям не найдено</pss=>
+        </div>
+           
+           <div class="content">
+           </div>
+      </section>
+    </main>
+        <footer class="footer">
+            <div class="footer-container">
+              <div class="footer-data">
+                <p class="copyright">©</p>
+                <p class="year">2022</p>
+                <a class="github-username" href="https://github.com/v-nv">GitHub</a>
+              </div>
+              <div class="logo-name">Online-store</div>
+              <a class="rss-logo" href="https://rs.school"></a>
+            </div>
+        </footer>
+    <!--<script type="module" src="./index.js"></script>-->
+</body>
+</html>
