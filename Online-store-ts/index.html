@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!--<link rel="stylesheet" type="css" href="../Soda/public/normalize.css">-->
+    <link rel="stylesheet" href="./normalize.css" type="text/css">
     <link rel="stylesheet"  href="./styles.css" type="text/css">
     <title>Online-store</title>
 </head>
@@ -48,11 +47,42 @@
                     </div> 
                </div>
            </div>
-               <div class="madein">Год</div>
-
-           </div>
-           <div class="bottom-left-cont">
-          </div>    
+           <!--чекбоксы низ-->
+           <div class="bottom-left-cont">Брэнды
+            <div class="brand" id="brand">
+               <div class="checkbox-cont">
+                  <label for="apple">Apple</label>
+                     <input type="checkbox" id="apple" value="apple"/>
+               </div>
+                <div class="checkbox-cont">
+                 <label for="warhouse">The Warehouse</label>
+                    <input type="checkbox" id="warhouse" value="warhouse"/>
+               </div>
+               <div class="checkbox-cont">   
+                  <label for="skmei">SKMEI 9117</label>
+                    <input type="checkbox" id="skmei" value="skmei"/>
+                  </div> 
+                <div class="checkbox-cont">   
+                 <label for="samsung">Samsung</label>
+                    <input type="checkbox" id="samsung" value="samsung"/>
+                </div>
+            </div> 
+        </div> 
+        <!--Слайдер-->
+        <div class="bottom-left-cont">
+          <div class="slider-head">Количество в наличии</div>
+          <div class="slider-copies-cont" id="slider-copies-cont" style="width: 300px;">
+     <div class="wrap">
+           <div style="display: flex; justify-content: center;"> 
+             <input type="number" class="slider-copies-counter-start" id="slider-copies-counter-start" value="5" disabled style="width: 40px; padding-left:16px;text-align: center;"/>
+            </div>
+            <div class="slider-copies" id="slider-copies"></div>
+            <div style="display: flex; justify-content: center;">
+            <input type="number" class="slider-copies-counter-end" id="slider-copies-counter-end" value="150" disabled style="width: 40px; padding-left:16px;text-align: center;"/>
+          </div>
+     </div>     
+        </div>
+      </div>  
        </section>
        
        <div class="popup off" id="popup">

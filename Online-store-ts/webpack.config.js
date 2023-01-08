@@ -24,7 +24,9 @@ const config = {
         new HtmlWebpackPlugin({
             template: 'index.html',
         }),
-
+        //new webpack.ProvidePlugin({
+          //  noUiSlider: 'nouislider'
+        //}),
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],

@@ -94,7 +94,7 @@ font-size: 23px;
     flex-direction: column;
     align-items: center;
     width: 25%;
-    height: 700px;
+    height: 920px;
     border: solid 2px rgb(255, 0, 255);
     gap: 10px;
 }
@@ -195,6 +195,19 @@ select {
     width: 95%;
     height: 300px;
     border: solid 2px violet;
+    font-size: 34px;
+    color: #776abc;
+}
+.brand{
+    width: 94%;
+    height: 77%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:25px;
+    border: solid 1px burlywood;
+    margin-bottom: 3px;
 }
 .view{
     cursor: pointer;

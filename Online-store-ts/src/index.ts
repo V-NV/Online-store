@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
+import './nouislider.css';
 import './style.css';
 import data from './data';
+import * as noUiSlider from 'nouislider';
 import { ForData } from './types/inter';
 window.addEventListener('beforeunload', setLocalStorage);
 window.addEventListener('load', getLocalStorage);
@@ -16,6 +18,10 @@ const Reset = document.querySelector('.reset-filter') as HTMLElement;//кноп�
 //const Bread = document.querySelector('.item-bread-link') as HTMLElement;//хлебные возврат
 const Table = document.getElementById("table") as HTMLElement;
 const List = document.getElementById("list") as HTMLElement;
+const sliderStock = document.getElementById('slider-copies') as noUiSlider.target;
+const sliderStockCounterStart = document.querySelector('#slider-copies-counter-start');
+const sliderStockCounterEnd = document.querySelector('#slider-copies-counter-end');
+
 const arrData = data;
 const arrFirst = data.slice();
 let arrCart: ForData[] = [];//массив карзины
@@ -24,10 +30,14 @@ let arrCurrient = arrData;//текущее состояние массива
 let isTable = true;//текущее отображение страницы
 let isList = false;//текущее отображение страницы
 let arrSmartCheckbox: ForData[] = [];//массив smartfones
-let isCheckOn = false; // состояние чекбокса
+let isCheckOn = false; // состояние чекбокса верх
+let isCheckOn2 = false;// состояние чекбокса низ
 let suma = 0;//сумма товаров в корзине для header
+let arrSliders: ForData[] = [];
+let stockCounterStart = 5;
+let stockCounterEnd = 150;
 
-function LS(){
+function LS(){ 
 
 if(localStorage.getItem('List') === 'true'){
 createList(arrData)//запуск при первой загрузке со всеми товарами 
@@ -230,7 +240,7 @@ function noItems(){
 const a = document.querySelector('.search-result') as HTMLElement;
 const b = document.querySelector('.no-items') as HTMLElement;
 //if(a.textContent < 1) {  // тут было убито 3 часа
-  if(arrCart.length < 1) {
+  if(arrCurrient.length < 1) {
 b.classList.remove('off')
 }
 else{
@@ -341,6 +351,84 @@ BoxCategory.addEventListener('click',() => {
   });
 
 /*---------------------------------Чекбоксы-END---------------------------------*/
+
+/*----------------------------Чекбоксы-нижние------------------------------*/
+
+const BoxBrand = document.getElementById('brand') as HTMLInputElement;//весь контейнер брэндов
+const CheckApple = document.getElementById('apple') as HTMLInputElement;
+const CheckWarhouse = document.getElementById('warhouse') as HTMLInputElement;
+const CheckSkmei = document.getElementById('skmei') as HTMLInputElement;
+const CheckSamsung = document.getElementById('samsung') as HTMLInputElement;
+//let ArrAllBrand = [];
+//console.log(CheckSmart.checked)
+BoxBrand.addEventListener('click',() => {
+  //console.log(CheckSmart.checked)
+  //console.log(arrCategoryCheckbox)
+  let arrBrandCheckbox: ForData[] = [];// все зажатые
+  let arrTempBox: ForData[] = [];//для конката
+  let arrApple: ForData[] = [];
+  let arrWarhouse: ForData[] = [];
+  let arrSkmei: ForData[] = [];
+  let arrSamsung: ForData[] = []; 
+
+    if (CheckApple.checked) {
+      arrApple = [];
+      arrApple = arrData.filter((el) => el.brand.includes('Apple'));
+    }
+    if (CheckWarhouse.checked) {
+      arrWarhouse = [];
+      arrWarhouse = arrData.filter((el) => el.brand.includes('The Warehouse'));
+    }
+    if (CheckSkmei.checked) {
+      arrSkmei = [];
+      arrSkmei = arrData.filter((el) => el.brand.includes('SKMEI 9117'));
+    }
+    if (CheckSamsung.checked) {
+      arrSamsung = [];
+      arrSamsung = arrData.filter((el) => el.brand.includes('Samsung'));
+    }  
+    if(CheckApple.checked || CheckWarhouse.checked || CheckSkmei.checked || CheckSamsung.checked) {
+      searchInput.value = '';// очистка инпута при выкл чекбокса
+      searchInput.placeholder = 'Введите запрос'
+      isCheckOn2 = true;
+        arrBrandCheckbox = arrTempBox.concat(arrApple, arrWarhouse, arrSkmei, arrSamsung);
+        isTable?createTable(arrBrandCheckbox):createList(arrBrandCheckbox);
+    }  
+      if(arrBrandCheckbox.length < 1){
+        isCheckOn2 = false;
+        isTable?createTable(arrData):createList(arrData);
+      }
+  });
+
+/*--------------------------Чекбоксы-нижние-END----------------------------*/
+
+/*------------------------------Слайдер------------------------------------*/
+
+
+if (sliderStock) {
+  noUiSlider.create(sliderStock, {
+    start: [5, 150],
+    step: 5,
+    connect: true,
+    range: {
+      min: [5],
+      max: [150],
+    },
+  });
+}
+if (sliderStock.noUiSlider) {
+  sliderStock.noUiSlider.on('update', function (values, handle) {
+    const inputs = [sliderStockCounterStart as HTMLInputElement, sliderStockCounterEnd as HTMLInputElement];
+    stockCounterStart = Math.round(+values[0]);
+    stockCounterEnd = Math.round(+values[1]);
+    inputs[handle].value = `${Math.round(+values[handle])}`;
+     
+    arrSliders = arrFirst.filter((item) => +item.stock >= stockCounterStart && +item.stock <= stockCounterEnd);
+    isTable ? createTable(arrSliders) : createList(arrSliders);
+    
+  });
+}
+/*----------------------------------Слайдер-END---------------------------------*/
 
 /*--------------------------------Карточки попап--------------------------------*/
 
@@ -855,15 +943,15 @@ function PayForm2() {
  }
  
  const checkRequired = (items: HTMLInputElement[]) => {
-   let schet = 0;
+   let schet2 = 0;
      items.forEach((item: HTMLInputElement) => {
          if (item.value.trim() === "") {
              Validate(item, "error", captializedNameOFInput(item) + " is required");
              }
          else {
              Validate(item, "success");
-             schet += 1;
-             if(+schet === 7){  
+             schet2 += 1;
+             if(+schet2 === 7){  
              
              setTimeout(() => Submit(), 2000);
              }
