@@ -32,6 +32,7 @@ let isList = false;//текущее отображение страницы
 let arrSmartCheckbox: ForData[] = [];//массив smartfones
 let isCheckOn = false; // состояние чекбокса верх
 let isCheckOn2 = false;// состояние чекбокса низ
+let isInCart = false;
 let suma = 0;//сумма товаров в корзине для header
 let arrSliders: ForData[] = [];
 let stockCounterStart = 5;
@@ -75,8 +76,8 @@ function createTable(Data: ForData[]) {
             </div>
             <img class="item-image" id="${data[i].id - 1}" alt="${data[i].title}" src="${data[i].thumbnail}">
             <div class="item-button-cont">
-            <button class="btn-item" id="btn-add${data[i].id}">Добавить в корзину</button>
-            <button class="btn-item" id="btn-del${data[i].id}">Удалить из корзины</button>
+            <div class="btn-item" id="btn-add${data[i].id}">Добавить в корзину</div>
+            <div class="btn-item" id="btn-del${data[i].id}">Удалить из корзины</div>
             </div>
           </div>
         `
@@ -101,7 +102,8 @@ function createTable(Data: ForData[]) {
     a.textContent = Data.length.toString();
     noItems();
      PopupOn();
-     AddItems()
+     AddItems();
+     ItemInCart();
   
   }
   /*----------------------отрисовка таблицой-конец--------------------------- */
@@ -144,7 +146,8 @@ function createTable(Data: ForData[]) {
         a.textContent = Data.length.toString();
         noItems();
          PopupOn();
-         AddItems()
+         AddItems();
+         ItemInCart();
        }
     }
 
@@ -176,6 +179,7 @@ List.addEventListener('click', function(){
       localStorage.setItem('List', JSON.stringify(true))
       localStorage.setItem('Table', JSON.stringify(false))
     }
+    ItemInCart();
 });
 
 
@@ -198,6 +202,7 @@ Table.addEventListener('click', function(){
     localStorage.setItem('List', JSON.stringify(false))
     localStorage.setItem('Table', JSON.stringify(true))
   }
+  ItemInCart();
 });
 
 /*------------------------------swich-table-list-END-----------------------------*/
@@ -456,9 +461,9 @@ function PopupOn(): void{
   Left.classList.add('off')
   Right.classList.add('off')
   Footer.classList.add('foot-down')
-
+  ItemInCart();
   Popup.classList.remove('off')
-
+  ItemInCart();
     Popup.innerHTML = '';
     Popup.innerHTML += `
     <div class="bread-cont">
@@ -496,11 +501,13 @@ function PopupOn(): void{
         </div>
       </div>
     `
+    ItemInCart();
     const Mov = document.querySelector('.item-image-pop') as HTMLInputElement;
     const btnChange = document.getElementById('left-arrow') as HTMLElement;
     const Bread = document.querySelector('.item-bread-link') as HTMLElement;
-    Bread.addEventListener('click',Hleb);
 
+    Bread.addEventListener('click',Hleb);
+    ItemInCart();
     const arrImg = arrFirst[+ID].images;
       
     let count = 0;
@@ -531,7 +538,7 @@ function PopupOn(): void{
         Mov.src = arrImg[count];
         count += 1;
        }
-
+       
     })
    
     const ZoomImg = document.querySelector('.item-image-pop') as HTMLElement;
@@ -565,27 +572,30 @@ PayForm2()
   console.log(arrCart)
   
 }
+
 }     
 
 
 /*-------------------------------- Быстрая оплата End------------------------------*/
   AddItems();
-  
+  ItemInCart();
     const Exit = document.querySelector('.exit') as HTMLElement;
     Exit.addEventListener('click', function() {
-      
+      ItemInCart();
       Left.classList.remove('off')
       Right.classList.remove('off')
       Footer.classList.remove('foot-down')
       view.classList.remove('off');
       Popup.classList.add('off');
       Popup.innerHTML = '';
-   
+      ItemInCart();
+      isTable?createTable(arrCurrient):createList(arrCurrient);
+
   })
 });
   }
 
-  
+  ItemInCart();
 }
 
 /*--------------------------------Карточки попап-End-------------------------------*/
@@ -980,7 +990,7 @@ function PayForm2() {
 /*pf2-end*
 
 /*********************************добавить удалить товар внутри корзины**************************/
-
+let itog = 0;
 function changePlusMinus(){
 const HowItem = document.querySelectorAll<HTMLInputElement>('.how-item');//между + и -
 const BtnPlusMinus = document.querySelectorAll<HTMLInputElement>('.btn-item-cart');
@@ -1001,7 +1011,7 @@ for(const el of Array.from(BtnPlusMinus)){//перебор кнопок
     //let knop = e.target;
     const { target } = e;
     
-    //let idBtn = knop.id.slice(7);//id кнопки только цифры
+    let idBtn = +(target as HTMLElement).id.slice(7);//id кнопки только цифры
     //console.log(knop,'эта кнопка нажата')
     
     
@@ -1018,9 +1028,15 @@ for(const el of Array.from(BtnPlusMinus)){//перебор кнопок
       console.log(plus.id,'+id')
       console.log(el.id.slice(7),'el id slice')
       console.log((plus as HTMLInputElement).value,'plus value')
-
+      
+      itog = +summ.textContent + +arrFirst[idBtn-1].price;
+      console.log(arrFirst[idBtn-1].price,'first cost')
+      console.log(itog,'itog')
+      console.log(summ.textContent,'cumma')
+          
     }
   }
+  
 }
 
 if((target as HTMLInputElement).id.includes('del')){// цикл для кнопок -
@@ -1118,7 +1134,10 @@ if((target as HTMLInputElement).id.includes('add') && isDouble.length < 1){
     korz.textContent = arrCart.length.toString();
     suma += +arrFirst[idBtn-1].price;
     summ.textContent = suma.toString();
-  }
+    let next = this.nextElementSibling
+    //console.log(this.nextElementSibling)
+    next.classList.add('btn-in');
+}
     //const textId = (target as HTMLInputElement).id.slice(0,7)
     //console.log(textId,'textId')
     if((target as HTMLInputElement).id.includes('del') && arrCart.length>0) {
@@ -1132,6 +1151,7 @@ if((target as HTMLInputElement).id.includes('add') && isDouble.length < 1){
      suma = suma - +arrFirst[idBtn-1].price;
      korz.textContent = arrCart.length.toString();
      summ.textContent = suma.toString();
+     this.classList.remove('btn-in');
      }
       }
       //}
@@ -1153,7 +1173,9 @@ Logo.addEventListener('click',function(){
   CartPage.classList.add('off')
   Popup.classList.add('off')
   PayOn.classList.add('off');
-  AddItems()
+  AddItems();
+  ItemInCart();
+      isTable?createTable(arrCurrient):createList(arrCurrient);
 });
 
 /********************LOGO CLICK***************/
@@ -1172,11 +1194,10 @@ function Hleb(){
   Popup.classList.add('off')
   PayOn.classList.add('off');
   AddItems()
+  ItemInCart();
+      isTable?createTable(arrCurrient):createList(arrCurrient);
+
 }
-
-
-
-
 
 
 /*****************bread click End**************/
@@ -1266,4 +1287,28 @@ function getLocalStorage() {
    /*-------------------end--local--storage------ */
 
 /************************localStorag******************************/
-/**************************** */
+
+/*************************подсветка в корзине*********************/
+function ItemInCart(){
+  const BtnAddDel =  Array.from(document.querySelectorAll('.btn-item'));
+
+  for(const el of BtnAddDel){
+  for (let i = 0; i < arrCart.length; i += 1) {
+if((el.id).includes(`${arrCart[i].id}`) && el.id.includes('del')){
+  el.classList.add('btn-in');
+//console.log(arrCart[i].id)
+//console.log(el.id)
+   }
+  }
+ }
+}
+/*********************подсветка в корзине END*********************/
+function itogi(x:string){
+  console.log(x,'xxxx')
+  const tog = document.querySelector('.header-summ') as HTMLInputElement;
+  const tog2 = document.querySelector('.SM') as HTMLElement;
+  tog.innerText = x;
+  tog2.innerText = x;
+
+}
+//itogi('4444444444444444')

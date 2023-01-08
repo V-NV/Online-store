@@ -1,4 +1,4 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 Online-store project!
 
 This project has been created using **webpack-cli**, you can now run
 

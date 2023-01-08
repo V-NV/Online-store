@@ -65,7 +65,6 @@ font-size: 23px;
 }
 /*----------------------end-header-----------------------*/
 
-
 .main{
     display: flex;
     flex-direction: row;
@@ -449,18 +448,23 @@ scroll-behavior: smooth;
     justify-content: space-around;
 }
 .btn-item{
-    height: 42px;
-    width:45%;
+    height: 38px;
+    width: 40%;
     background-color: #2daed1;
-    color:#f5e593;
+    color: #f5e593;
     border-radius: 10px;
     border: none;
     margin-top: 10px;
+    text-align: center;
+    padding: 0px 10px 0 10px;
 }
 .btn-item:hover{
     background-color: rgb(197, 127, 77);
     color:#e2cb58;
     cursor: pointer;
+}
+.btn-in{
+    color: #931616;
 }
 .off{
     display: none !important; 
