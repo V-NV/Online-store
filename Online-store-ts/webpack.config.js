@@ -9,7 +9,7 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
-
+//const EslingPlugin = require('eslint-webpack-plugin');//ttt
 
 const config = {
     entry: './src/index.ts',
@@ -24,6 +24,9 @@ const config = {
         new HtmlWebpackPlugin({
             template: 'index.html',
         }),
+       // new EslingPlugin({ extensions: 'ts', 
+        //}),//ttt
+
         //new webpack.ProvidePlugin({
           //  noUiSlider: 'nouislider'
         //}),
