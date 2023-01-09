@@ -3,6 +3,7 @@ import "./style.css";
 import data from "./data";
 import * as noUiSlider from "nouislider";
 import { ForData } from "./types/inter";
+import score from "./score";
 window.addEventListener("beforeunload", setLocalStorage);
 window.addEventListener("load", getLocalStorage);
 const view = document.querySelector(".content") as HTMLElement;
@@ -1223,3 +1224,4 @@ function promokod() {
     }
   };
 }
+console.log(score);
